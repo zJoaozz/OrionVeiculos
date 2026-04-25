@@ -1,9 +1,8 @@
+const mongoose = require("mongoose");
 const Vehicle = require("../models/vehicle");
 
 function normalizeStatus(status) {
-  const value = String(status || "")
-    .trim()
-    .toLowerCase();
+  const value = String(status || "").trim().toLowerCase();
 
   if (value === "reservado") return "reservado";
   if (value === "vendido") return "vendido";
@@ -12,9 +11,11 @@ function normalizeStatus(status) {
 
 function normalizeBoolean(value) {
   if (typeof value === "boolean") return value;
+
   if (typeof value === "string") {
     return value.toLowerCase() === "true";
   }
+
   return Boolean(value);
 }
 
@@ -92,12 +93,20 @@ function validateVehiclePayload(payload) {
     }
   }
 
+  if (!["disponivel", "reservado", "vendido"].includes(payload.status)) {
+    return 'O campo "status" precisa ser disponivel, reservado ou vendido.';
+  }
+
   if (!Array.isArray(payload.images) || payload.images.length === 0) {
     return 'O campo "images" precisa ter pelo menos uma imagem.';
   }
 
-  if (Number.isNaN(payload.ordem)) {
-    return 'O campo "ordem" precisa ser numérico.';
+  if (payload.images.some((image) => !image.url)) {
+    return 'Todas as imagens precisam ter uma URL válida.';
+  }
+
+  if (Number.isNaN(payload.ordem) || payload.ordem < 0) {
+    return 'O campo "ordem" precisa ser um número igual ou maior que zero.';
   }
 
   if (Number.isNaN(payload.coverIndex)) {
@@ -111,6 +120,17 @@ function validateVehiclePayload(payload) {
   return null;
 }
 
+function isValidObjectId(id) {
+  return mongoose.Types.ObjectId.isValid(id);
+}
+
+function sendServerError(res, message) {
+  return res.status(500).json({
+    ok: false,
+    message
+  });
+}
+
 async function getAllVehicles(req, res) {
   try {
     const vehicles = await Vehicle.find().sort({ ordem: 1, createdAt: -1 });
@@ -121,16 +141,21 @@ async function getAllVehicles(req, res) {
       data: vehicles
     });
   } catch (error) {
-    return res.status(500).json({
-      ok: false,
-      message: "Erro ao listar veículos.",
-      error: error.message
-    });
+    console.error("Erro ao listar veículos:", error);
+
+    return sendServerError(res, "Erro ao listar veículos.");
   }
 }
 
 async function getVehicleById(req, res) {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({
+        ok: false,
+        message: "ID do veículo inválido."
+      });
+    }
+
     const vehicle = await Vehicle.findById(req.params.id);
 
     if (!vehicle) {
@@ -145,11 +170,9 @@ async function getVehicleById(req, res) {
       data: vehicle
     });
   } catch (error) {
-    return res.status(500).json({
-      ok: false,
-      message: "Erro ao buscar veículo.",
-      error: error.message
-    });
+    console.error("Erro ao buscar veículo:", error);
+
+    return sendServerError(res, "Erro ao buscar veículo.");
   }
 }
 
@@ -177,16 +200,21 @@ async function createVehicle(req, res) {
       data: vehicle
     });
   } catch (error) {
-    return res.status(500).json({
-      ok: false,
-      message: "Erro ao cadastrar veículo.",
-      error: error.message
-    });
+    console.error("Erro ao cadastrar veículo:", error);
+
+    return sendServerError(res, "Erro ao cadastrar veículo.");
   }
 }
 
 async function updateVehicle(req, res) {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({
+        ok: false,
+        message: "ID do veículo inválido."
+      });
+    }
+
     const existingVehicle = await Vehicle.findById(req.params.id);
 
     if (!existingVehicle) {
@@ -228,16 +256,21 @@ async function updateVehicle(req, res) {
       data: updatedVehicle
     });
   } catch (error) {
-    return res.status(500).json({
-      ok: false,
-      message: "Erro ao atualizar veículo.",
-      error: error.message
-    });
+    console.error("Erro ao atualizar veículo:", error);
+
+    return sendServerError(res, "Erro ao atualizar veículo.");
   }
 }
 
 async function deleteVehicle(req, res) {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({
+        ok: false,
+        message: "ID do veículo inválido."
+      });
+    }
+
     const deletedVehicle = await Vehicle.findByIdAndDelete(req.params.id);
 
     if (!deletedVehicle) {
@@ -252,11 +285,9 @@ async function deleteVehicle(req, res) {
       message: "Veículo excluído com sucesso."
     });
   } catch (error) {
-    return res.status(500).json({
-      ok: false,
-      message: "Erro ao excluir veículo.",
-      error: error.message
-    });
+    console.error("Erro ao excluir veículo:", error);
+
+    return sendServerError(res, "Erro ao excluir veículo.");
   }
 }
 

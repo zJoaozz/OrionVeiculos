@@ -4,7 +4,13 @@ const sessions = new Map();
 const SESSION_TTL_MS = 1000 * 60 * 60 * 12;
 
 function getAdminPassword() {
-  return String(process.env.ADMIN_PASSWORD || "orion123").trim();
+  const password = String(process.env.ADMIN_PASSWORD || "").trim();
+
+  if (!password) {
+    throw new Error("ADMIN_PASSWORD não definida no arquivo .env.");
+  }
+
+  return password;
 }
 
 function createToken() {
