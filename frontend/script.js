@@ -13,7 +13,11 @@ const DEFAULT_CATEGORY_IMAGE = "imagens/logo-orion-redonda.jpg";
 
 const searchInput = document.getElementById("searchInput");
 const searchButton = document.getElementById("searchButton");
-const filterButtons = document.querySelectorAll(".filter-chip");
+const filtersWrap = document.getElementById("filtersWrap");
+const categoriesPrev = document.getElementById("categoriesPrev");
+const categoriesNext = document.getElementById("categoriesNext");
+const filtersPrev = document.getElementById("filtersPrev");
+const filtersNext = document.getElementById("filtersNext");
 const themeToggle = document.getElementById("themeToggle");
 const themeIcon = document.querySelector(".theme-icon");
 const carsGrid = document.getElementById("carsGrid");
@@ -652,7 +656,98 @@ function renderCategories() {
       `;
     })
     .join("");
+
+  updateRailButtons(categoriesGrid, categoriesPrev, categoriesNext);
 }
+
+function renderFilterChips() {
+  if (!filtersWrap) return;
+
+  const fixedFilters = [
+    { label: "Todos", filter: "todos", active: true },
+    { label: "Automáticos", filter: "automatico" },
+    { label: "Econômicos", filter: "economico" }
+  ];
+
+  const usedFilters = new Set(fixedFilters.map((item) => item.filter));
+  const categoryFilters = getCategories()
+    .map((category) => {
+      const label = category.nome || "Categoria";
+      const filter = normalizeText(category.slug || label);
+      return { label, filter };
+    })
+    .filter((item) => {
+      if (!item.filter || usedFilters.has(item.filter)) return false;
+      usedFilters.add(item.filter);
+      return true;
+    });
+
+  filtersWrap.innerHTML = [...fixedFilters, ...categoryFilters]
+    .map(
+      (item) => `
+        <button
+          class="filter-chip ${item.active ? "active" : ""} ${item.filter !== "todos" && !["automatico", "economico"].includes(item.filter) ? "dynamic-category" : ""}"
+          data-filter="${item.filter}"
+          type="button"
+        >${item.label}</button>
+      `
+    )
+    .join("");
+
+  updateRailButtons(filtersWrap, filtersPrev, filtersNext);
+}
+
+function getCarSearchTags(car) {
+  return [
+    car.tags,
+    car.titulo,
+    car.marca,
+    car.modelo,
+    car.ano,
+    car.combustivel,
+    car.km,
+    car.preco,
+    car.cidade,
+    car.categoria,
+    car.tag,
+    car.status
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function scrollRail(rail, direction = 1) {
+  if (!rail) return;
+
+  const distance = Math.max(rail.clientWidth * 0.82, 280);
+  rail.scrollBy({ left: distance * direction, behavior: "smooth" });
+}
+
+function updateRailButtons(rail, prevButton, nextButton) {
+  if (!rail || !prevButton || !nextButton) return;
+
+  const maxScrollLeft = Math.max(rail.scrollWidth - rail.clientWidth, 0);
+  const hasOverflow = maxScrollLeft > 8;
+  const currentLeft = rail.scrollLeft;
+
+  prevButton.classList.toggle("is-disabled", !hasOverflow || currentLeft <= 8);
+  nextButton.classList.toggle("is-disabled", !hasOverflow || currentLeft >= maxScrollLeft - 8);
+}
+
+function setupHorizontalRail(rail, prevButton, nextButton) {
+  if (!rail || !prevButton || !nextButton) return;
+
+  prevButton.addEventListener("click", () => scrollRail(rail, -1));
+  nextButton.addEventListener("click", () => scrollRail(rail, 1));
+
+  rail.addEventListener("scroll", () => updateRailButtons(rail, prevButton, nextButton), {
+    passive: true
+  });
+
+  window.addEventListener("resize", () => updateRailButtons(rail, prevButton, nextButton));
+  setTimeout(() => updateRailButtons(rail, prevButton, nextButton), 80);
+}
+
 
 function createCardMarkup(car) {
   const siteSettings = getSiteSettings();
@@ -669,7 +764,7 @@ function createCardMarkup(car) {
   const firstImage = images[0] || getCoverImage(car);
 
   return `
-    <article class="car-card" data-tags="${car.tags || ""}">
+    <article class="car-card" data-tags="${getCarSearchTags(car)}">
       <div class="car-slider" data-slider-id="${car._id || car.id}">
         <button class="slider-btn prev ${images.length <= 1 ? "hidden" : ""}" type="button" data-action="prev">‹</button>
         <img src="${firstImage}" alt="${car.titulo}" />
@@ -937,13 +1032,19 @@ if (searchInput) {
   searchInput.addEventListener("input", applyFilters);
 }
 
-filterButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    filterButtons.forEach((btn) => btn.classList.remove("active"));
+if (filtersWrap) {
+  filtersWrap.addEventListener("click", (event) => {
+    const button = event.target.closest(".filter-chip");
+    if (!button) return;
+
+    filtersWrap.querySelectorAll(".filter-chip").forEach((btn) =>
+      btn.classList.remove("active")
+    );
+
     button.classList.add("active");
     applyFilters();
   });
-});
+}
 
 if (themeToggle) {
   themeToggle.addEventListener("click", toggleTheme);
@@ -1018,6 +1119,9 @@ async function initHome() {
   await fetchContent();
   applyHomeSettings();
   renderCategories();
+  renderFilterChips();
+  setupHorizontalRail(categoriesGrid, categoriesPrev, categoriesNext);
+  setupHorizontalRail(filtersWrap, filtersPrev, filtersNext);
 
   allCars = await fetchVehicles();
 

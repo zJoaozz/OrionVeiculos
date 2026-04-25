@@ -149,18 +149,33 @@
           <p>Escolha o tipo de carro que combina com você.</p>
         </div>
 
-        <div class="categories-grid" id="categoriesGrid"></div>
+        <div class="horizontal-showcase categories-showcase">
+          <button class="rail-arrow rail-arrow-left" id="categoriesPrev" type="button" aria-label="Ver categorias anteriores">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+
+          <div class="categories-grid horizontal-rail" id="categoriesGrid"></div>
+
+          <button class="rail-arrow rail-arrow-right" id="categoriesNext" type="button" aria-label="Ver próximas categorias">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
       </div>
     </section>
 
     <section class="quick-filters reveal">
-      <div class="container filters-wrap">
-        <button class="filter-chip active" data-filter="todos" type="button">Todos</button>
-        <button class="filter-chip" data-filter="automatico" type="button">Automáticos</button>
-        <button class="filter-chip" data-filter="economico" type="button">Econômicos</button>
-        <button class="filter-chip" data-filter="sedan" type="button">Sedans</button>
-        <button class="filter-chip" data-filter="suv" type="button">SUVs</button>
-        <button class="filter-chip" data-filter="picape" type="button">Picapes</button>
+      <div class="container">
+        <div class="horizontal-showcase filters-showcase">
+          <button class="rail-arrow rail-arrow-left" id="filtersPrev" type="button" aria-label="Ver filtros anteriores">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+
+          <div class="filters-wrap horizontal-rail" id="filtersWrap" aria-label="Filtros rápidos de veículos"></div>
+
+          <button class="rail-arrow rail-arrow-right" id="filtersNext" type="button" aria-label="Ver próximos filtros">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
       </div>
     </section>
 
