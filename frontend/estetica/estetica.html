@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orion Estética Automotiva</title>
+  <link rel="stylesheet" href="estetica.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="../index.html#inicio" class="brand">
+        <img src="../imagens/logo-orion-redonda.jpg" alt="Logo Orion Veículos" class="brand-logo" />
+        <div class="brand-text">
+          <strong>Orion Veículos</strong>
+          <span>Orion Estética Automotiva</span>
+        </div>
+      </a>
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+        aria-controls="navLinks"
+        title="Menu"
+      >
+        <i class="bi bi-list"></i>
+      </button>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="../index.html#inicio">Início</a>
+        <a href="../index.html#categorias">Categorias</a>
+        <a href="../index.html#destaques">Destaques</a>
+        <a href="../estoque/estoque.html">Estoque</a>
+        <a href="estetica.html" class="active">Estética</a>
+        <a href="../index.html#beneficios">Por que Orion</a>
+        <a href="#localizacao">Localização</a>
+        <a href="#contato">Contato</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a
+          class="icon-action instagram-action"
+          id="navInstagramLink"
+          href="https://www.instagram.com/orionestetica2004/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram da Orion Estética"
+          title="Instagram Orion Estética"
+        >
+          <i class="bi bi-instagram"></i>
+        </a>
+
+        <a
+          class="icon-action whatsapp-action"
+          id="navWhatsappLink"
+          href="https://wa.me/5586999935385?text=Olá! Quero saber sobre estética automotiva."
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="WhatsApp da Orion Estética"
+          title="WhatsApp"
+        >
+          <i class="bi bi-whatsapp"></i>
+        </a>
+
+        <button id="themeToggle" class="icon-action theme-toggle" type="button" aria-label="Alternar tema" title="Alternar tema">
+          <span class="theme-icon">☀</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+  <main>
+    <section class="hero reveal">
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <span class="hero-badge" id="heroBadge">Cuidado premium • Acabamento profissional</span>
+          <h1 id="heroTitle">Orion Estética Automotiva</h1>
+          <p id="heroSubtitle">
+            Revitalização, higienização e proteção para deixar seu veículo com
+            apresentação de alto padrão, mais brilho e mais conservação.
+          </p>
+
+          <div class="hero-actions">
+            <a
+              id="heroPrimaryButton"
+              href="https://wa.me/5586999935385?text=Olá! Quero saber sobre estética automotiva."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary"
+            >
+              Solicitar atendimento
+            </a>
+
+            <a
+              id="heroSecondaryButton"
+              href="https://www.instagram.com/orionestetica2004/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-secondary"
+            >
+              Ver Instagram
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-card">
+            <img
+              src="../imagens/logo-orion-redonda.jpg"
+              alt="Orion Estética Automotiva"
+              class="hero-image"
+              id="heroImage"
+            />
+            <div class="hero-card-info">
+              <span>Estética automotiva</span>
+              <strong>Mais brilho, proteção e acabamento</strong>
+              <p>Serviços pensados para valorizar e preservar seu veículo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="services reveal" id="servicos">
+      <div class="container">
+        <div class="section-head center">
+          <h2 id="servicesSectionTitle">Nossos serviços</h2>
+          <p id="servicesSectionSubtitle">Tratamentos e cuidados para elevar o padrão do seu carro.</p>
+        </div>
+
+        <div class="services-grid" id="servicesGrid"></div>
+      </div>
+    </section>
+
+    <section class="process reveal">
+      <div class="container">
+        <div class="section-head center">
+          <h2 id="processSectionTitle">Como funciona</h2>
+          <p id="processSectionSubtitle">Um processo simples, direto e profissional.</p>
+        </div>
+
+        <div class="process-grid">
+          <article class="process-card">
+            <span class="process-number">01</span>
+            <h3>Atendimento</h3>
+            <p>Você entra em contato e explica o que deseja para o veículo.</p>
+          </article>
+
+          <article class="process-card">
+            <span class="process-number">02</span>
+            <h3>Avaliação</h3>
+            <p>A equipe entende a necessidade e orienta o melhor serviço.</p>
+          </article>
+
+          <article class="process-card">
+            <span class="process-number">03</span>
+            <h3>Execução</h3>
+            <p>O veículo recebe os cuidados e tratamentos conforme o serviço escolhido.</p>
+          </article>
+
+          <article class="process-card">
+            <span class="process-number">04</span>
+            <h3>Entrega</h3>
+            <p>Você recebe o carro com apresentação renovada e acabamento valorizado.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="gallery reveal">
+      <div class="container">
+        <div class="section-head center">
+          <h2 id="gallerySectionTitle">Apresentação visual</h2>
+          <p id="gallerySectionSubtitle">Uma estética forte para valorizar cada detalhe do veículo.</p>
+        </div>
+
+        <div class="gallery-grid">
+          <div class="gallery-card large">
+            <img id="galleryMainImage" src="../imagens/logo-orion-redonda.jpg" alt="Imagem principal da estética" />
+          </div>
+
+          <div class="gallery-card">
+            <img id="galleryImage1" src="../imagens/logo-orion-redonda.jpg" alt="Imagem da galeria 1" class="gallery-small-image hidden" />
+            <div class="gallery-placeholder" id="galleryPlaceholder1">
+              <i class="bi bi-image"></i>
+              <span>Espaço para antes/depois</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <img id="galleryImage2" src="../imagens/logo-orion-redonda.jpg" alt="Imagem da galeria 2" class="gallery-small-image hidden" />
+            <div class="gallery-placeholder" id="galleryPlaceholder2">
+              <i class="bi bi-image"></i>
+              <span>Espaço para acabamento</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <img id="galleryImage3" src="../imagens/logo-orion-redonda.jpg" alt="Imagem da galeria 3" class="gallery-small-image hidden" />
+            <div class="gallery-placeholder" id="galleryPlaceholder3">
+              <i class="bi bi-image"></i>
+              <span>Espaço para higienização</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <img id="galleryImage4" src="../imagens/logo-orion-redonda.jpg" alt="Imagem da galeria 4" class="gallery-small-image hidden" />
+            <div class="gallery-placeholder" id="galleryPlaceholder4">
+              <i class="bi bi-image"></i>
+              <span>Espaço para proteção</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta reveal" id="contato">
+      <div class="container">
+        <div class="cta-card">
+          <div class="cta-content">
+            <span class="hero-badge" id="ctaBadge">Atendimento rápido</span>
+            <h2 id="ctaTitle">Quer cuidar melhor do seu carro?</h2>
+            <p id="ctaSubtitle">
+              Fale com a Orion Estética Automotiva e saiba qual serviço combina
+              melhor com o seu veículo.
+            </p>
+          </div>
+
+          <div class="cta-actions">
+            <a
+              id="ctaPrimaryButton"
+              href="https://wa.me/5586999935385?text=Olá! Quero saber sobre estética automotiva."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary"
+            >
+              Chamar no WhatsApp
+            </a>
+
+            <a
+              id="ctaSecondaryButton"
+              href="https://www.instagram.com/orionestetica2004/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-secondary"
+            >
+              Instagram da estética
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="location reveal" id="localizacao">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="locationSectionTitle">Onde estamos</h2>
+          <p id="locationSectionSubtitle">Atendimento no mesmo endereço da Orion, com praticidade e confiança.</p>
+        </div>
+
+        <div class="location-grid">
+          <div class="location-card">
+            <div class="info-card-head">
+              <div class="info-icon">
+                <i class="bi bi-geo-alt-fill"></i>
+              </div>
+
+              <div>
+                <h3 id="locationName">Orion Estética Automotiva</h3>
+                <p id="locationLabel">Localização da unidade</p>
+              </div>
+            </div>
+
+            <ul class="location-list">
+              <li>
+                <i class="bi bi-signpost-2-fill"></i>
+                <span id="locationAddress1">Av. João XXIII, 1503</span>
+              </li>
+
+              <li>
+                <i class="bi bi-buildings-fill"></i>
+                <span id="locationAddress2">São Cristóvão, Teresina - PI</span>
+              </li>
+
+              <li>
+                <i class="bi bi-instagram"></i>
+                <span id="locationInstagram">@orionestetica2004</span>
+              </li>
+            </ul>
+
+            <div class="location-actions">
+              <a
+                id="mapsOpenButton"
+                href="https://www.google.com/maps"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-primary"
+              >
+                <i class="bi bi-map"></i>
+                <span>Abrir no Maps</span>
+              </a>
+
+              <a
+                id="locationWhatsappButton"
+                href="https://wa.me/5586999935385?text=Olá! Quero saber sobre estética automotiva."
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-secondary"
+              >
+                <i class="bi bi-whatsapp"></i>
+                <span>Falar agora</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="map-card">
+            <iframe
+              id="locationMapFrame"
+              src="https://maps.google.com/maps?q=Av.%20Jo%C3%A3o%20XXIII%2C%201503%2C%20Teresina&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              loading="lazy"
+              allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Mapa Orion Estética Automotiva"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="estetica.js"></script>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orion Veículos | Novos e Seminovos</title>
+  <link rel="stylesheet" href="style.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="#inicio" class="brand">
+        <img src="imagens/logo-orion-redonda.jpg" alt="Logo Orion Veículos" class="brand-logo" />
+        <div class="brand-text">
+          <strong>Orion Veículos</strong>
+          <span>Novos e seminovos com confiança</span>
+        </div>
+      </a>
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+        aria-controls="navLinks"
+        title="Menu"
+      >
+        <i class="bi bi-list"></i>
+      </button>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#inicio">Início</a>
+        <a href="#categorias">Categorias</a>
+        <a href="#destaques">Destaques</a>
+        <a href="estoque/estoque.html">Estoque</a>
+        <a href="#estetica">Estética</a>
+        <a href="#beneficios">Por que Orion</a>
+        <a href="#localizacao">Localização</a>
+        <a href="#contato">Contato</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a
+          class="icon-action instagram-action"
+          id="navInstagramLink"
+          href="https://www.instagram.com/orionveiculos2004/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram da Orion Veículos"
+          title="Instagram Orion Veículos"
+        >
+          <i class="bi bi-instagram"></i>
+        </a>
+
+        <a
+          class="icon-action whatsapp-action"
+          id="navWhatsappLink"
+          href="https://wa.me/5586999935385?text=Olá! Quero atendimento da Orion Veículos."
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="WhatsApp da Orion Veículos"
+          title="WhatsApp"
+        >
+          <i class="bi bi-whatsapp"></i>
+        </a>
+
+        <button id="themeToggle" class="icon-action theme-toggle" type="button" aria-label="Alternar tema" title="Alternar tema">
+          <span class="theme-icon">☀</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+  <main id="inicio">
+    <section class="hero reveal">
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <span class="hero-badge" id="homeBadge">Estoque selecionado • Atendimento rápido</span>
+
+          <h1 id="homeTitle">Encontre seu próximo carro na Orion Veículos</h1>
+
+          <p id="homeSubtitle">
+            Uma experiência mais simples, profissional e direta para quem quer comprar
+            com confiança. Veja nossos destaques e fale com a loja pelo WhatsApp.
+          </p>
+
+          <div class="search-box">
+            <div class="search-row">
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Busque por marca, modelo ou categoria"
+              />
+              <button id="searchButton" type="button">Ver ofertas</button>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <a href="estoque/estoque.html" class="btn-primary" id="homePrimaryButton">Ver estoque</a>
+            <a
+              id="homeSecondaryButton"
+              href="https://wa.me/5586999935385?text=Olá! Quero saber mais sobre os carros da Orion Veículos."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-secondary"
+            >
+              Falar com a loja
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-card">
+            <div class="hero-slider" id="heroSlider">
+              <button id="heroPrev" class="slider-btn prev hidden" type="button" aria-label="Imagem anterior">‹</button>
+
+              <img
+                id="heroMainImage"
+                src="imagens/logo-orion-redonda.jpg"
+                alt="Carro em destaque Orion Veículos"
+              />
+
+              <button id="heroNext" class="slider-btn next hidden" type="button" aria-label="Próxima imagem">›</button>
+
+              <div id="heroDots" class="slider-dots"></div>
+            </div>
+
+            <div class="hero-card-info">
+              <span>Destaque da semana</span>
+              <strong id="heroTitle">Volkswagen Voyage 1.0</strong>
+              <p id="heroSubtitle">R$ 61.900,00 • 95.000 km • Teresina - PI</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="categories reveal" id="categorias">
+      <div class="container">
+        <div class="section-head">
+          <h2>Categorias em destaque</h2>
+          <p>Escolha o tipo de carro que combina com você.</p>
+        </div>
+
+        <div class="categories-grid" id="categoriesGrid"></div>
+      </div>
+    </section>
+
+    <section class="quick-filters reveal">
+      <div class="container filters-wrap">
+        <button class="filter-chip active" data-filter="todos" type="button">Todos</button>
+        <button class="filter-chip" data-filter="automatico" type="button">Automáticos</button>
+        <button class="filter-chip" data-filter="economico" type="button">Econômicos</button>
+        <button class="filter-chip" data-filter="sedan" type="button">Sedans</button>
+        <button class="filter-chip" data-filter="suv" type="button">SUVs</button>
+        <button class="filter-chip" data-filter="picape" type="button">Picapes</button>
+      </div>
+    </section>
+
+    <section class="featured reveal" id="destaques">
+      <div class="container">
+        <div class="section-head">
+          <h2>Carros em destaque</h2>
+          <p>Estoque selecionado com atendimento direto da loja.</p>
+        </div>
+
+        <div class="cars-grid" id="carsGrid"></div>
+        <div id="featuredStatus" class="grid-status hidden" aria-live="polite"></div>
+
+        <div class="featured-actions">
+          <a href="estoque/estoque.html" class="btn-primary">Ver estoque completo</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="estetica reveal" id="estetica">
+      <div class="container">
+        <div class="section-head center">
+          <h2>Orion Estética Automotiva</h2>
+          <p>Revitalização, acabamento e estética premium para seu veículo.</p>
+        </div>
+
+        <div class="estetica-grid">
+          <article class="estetica-card">
+            <div class="estetica-icon">
+              <i class="bi bi-stars"></i>
+            </div>
+            <h3>Revitalização Completa</h3>
+            <p>Seu carro com aparência de novo, brilho e acabamento profissional.</p>
+          </article>
+
+          <article class="estetica-card">
+            <div class="estetica-icon">
+              <i class="bi bi-droplet-half"></i>
+            </div>
+            <h3>Higienização Interna</h3>
+            <p>Limpeza profunda com padrão de concessionária.</p>
+          </article>
+
+          <article class="estetica-card">
+            <div class="estetica-icon">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <h3>Proteção e Durabilidade</h3>
+            <p>Tratamentos que aumentam a vida útil da pintura e interior.</p>
+          </article>
+        </div>
+
+        <div class="estetica-actions">
+          <a
+            href="estetica/estetica.html"
+            class="btn-primary"
+          >
+            Ver mais
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust reveal" id="beneficios">
+      <div class="container">
+        <div class="section-head center">
+          <h2 id="homeWhyTitle">Por que comprar com a Orion?</h2>
+          <p id="homeWhySubtitle">Uma experiência mais simples, direta e profissional.</p>
+        </div>
+
+        <div class="trust-grid">
+          <article class="trust-card">
+            <div class="trust-icon">
+              <i class="bi bi-stars"></i>
+            </div>
+            <h3>Veículos selecionados</h3>
+            <p>Escolhemos carros com bom padrão de conservação e ótima apresentação.</p>
+          </article>
+
+          <article class="trust-card">
+            <div class="trust-icon">
+              <i class="bi bi-lightning-charge-fill"></i>
+            </div>
+            <h3>Atendimento rápido</h3>
+            <p>Contato direto com a loja para tirar dúvidas e agilizar sua negociação.</p>
+          </article>
+
+          <article class="trust-card">
+            <div class="trust-icon">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <h3>Negociação facilitada</h3>
+            <p>Mais praticidade para quem quer comprar sem enrolação.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="location reveal" id="localizacao">
+      <div class="container">
+        <div class="section-head">
+          <h2>Onde estamos</h2>
+          <p>Visite a Orion Veículos ou abra a rota direto no Google Maps.</p>
+        </div>
+
+        <div class="location-grid">
+          <div class="location-card">
+            <div class="info-card-head">
+              <div class="info-icon">
+                <i class="bi bi-geo-alt-fill"></i>
+              </div>
+
+              <div>
+                <h3>Orion Veículos</h3>
+                <p class="info-subtitle">Localização da loja</p>
+              </div>
+            </div>
+
+            <div class="location-lines">
+              <div class="info-line">
+                <i class="bi bi-signpost-2-fill"></i>
+                <span>Av. João XXIII, 1503</span>
+              </div>
+
+              <div class="info-line">
+                <i class="bi bi-buildings-fill"></i>
+                <span>São Cristóvão, Teresina - PI</span>
+              </div>
+
+              <div class="info-line">
+                <i class="bi bi-mailbox2-flag"></i>
+                <span>CEP 64049-010</span>
+              </div>
+            </div>
+
+            <div class="location-actions">
+              <a
+                id="locationMapsButton"
+                href="https://www.google.com/maps/place/Av.+Jo%C3%A3o+XXIII,+1503+-+S%C3%A3o+Crist%C3%B3v%C3%A3o,+Teresina+-+PI,+64049-010/@-5.0811874,-42.7727494,15z/data=!4m6!3m5!1s0x78e3a11124bb65b:0xb434e78ce0588250!8m2!3d-5.0811874!4d-42.7727494!16s%2Fg%2F11gjzqbtkz?hl=pt-br&entry=ttu&g_ep=EgoyMDI2MDQxMy4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-primary icon-button"
+              >
+                <i class="bi bi-map-fill"></i>
+                <span>Abrir no Maps</span>
+              </a>
+
+              <a
+                id="locationWhatsappButton"
+                href="https://wa.me/5586999935385?text=Olá! Quero saber mais sobre a localização da Orion Veículos."
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-secondary icon-button"
+              >
+                <i class="bi bi-whatsapp"></i>
+                <span>Pedir localização</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="map-card">
+            <iframe
+              src="https://maps.google.com/maps?q=Av.%20Jo%C3%A3o%20XXIII%2C%201503%2C%20S%C3%A3o%20Crist%C3%B3v%C3%A3o%2C%20Teresina%20-%20PI&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+              title="Mapa Orion Veículos"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="social reveal" id="contato">
+      <div class="container">
+        <div class="section-head center">
+          <h2>Fale com a Orion Veículos agora</h2>
+          <p>Receba atendimento, mais fotos, detalhes e simulação pelo WhatsApp.</p>
+        </div>
+
+        <div class="contact-highlight">
+          <div class="contact-main-card">
+            <div class="contact-main-icon">
+              <i class="bi bi-whatsapp"></i>
+            </div>
+
+            <h3>Atendimento direto da loja</h3>
+
+            <p>
+              Tire dúvidas, peça mais fotos, consulte detalhes do veículo e fale com a Orion
+              de forma rápida pelo WhatsApp.
+            </p>
+
+            <a
+              id="contactWhatsappButton"
+              href="https://wa.me/5586999935385?text=Olá! Quero atendimento da Orion Veículos."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary icon-button contact-main-button"
+            >
+              <i class="bi bi-send-fill"></i>
+              <span>Chamar no WhatsApp</span>
+            </a>
+          </div>
+
+          <div class="social-card instagram-card">
+            <div class="social-icon instagram-icon">
+              <i class="bi bi-instagram"></i>
+            </div>
+
+            <h3>Instagram</h3>
+            <p>Acompanhe os veículos, novidades e publicações da loja.</p>
+
+            <a
+              id="contactInstagramButton"
+              href="https://www.instagram.com/orionveiculos2004/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-secondary icon-button"
+            >
+              <i class="bi bi-box-arrow-up-right"></i>
+              <span>Acessar Instagram</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div>
+        <strong>Orion Veículos</strong>
+        <p>Novos e seminovos com confiança.</p>
+      </div>
+
+      <span>© 2026 Orion Veículos. Todos os direitos reservados.</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

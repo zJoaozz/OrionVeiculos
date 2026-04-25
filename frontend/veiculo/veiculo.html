@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalhes do veículo | Orion Veículos</title>
+  <link rel="stylesheet" href="veiculo.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+</head>
+<body>
+  <header class="vehicle-topbar">
+    <div class="container vehicle-nav">
+      <a href="../index.html#inicio" class="brand">
+        <img
+          src="../imagens/logo-orion-redonda.jpg"
+          alt="Logo Orion Veículos"
+          class="brand-logo"
+        />
+        <div class="brand-text">
+          <strong>Orion Veículos</strong>
+          <span>Novos e seminovos com confiança</span>
+        </div>
+      </a>
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+        aria-controls="vehicleLinks"
+        title="Menu"
+      >
+        <i class="bi bi-list"></i>
+      </button>
+
+      <nav class="vehicle-links" id="vehicleLinks">
+        <a href="../index.html#inicio">Início</a>
+        <a href="../estoque/estoque.html">Estoque</a>
+        <a href="../index.html#destaques">Destaques</a>
+        <a href="../index.html#contato">Contato</a>
+      </nav>
+
+      <div class="vehicle-actions">
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Alternar tema">
+          <span class="theme-icon">☾</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+  <main class="vehicle-page">
+    <div class="container">
+      <div id="vehicleLoading" class="vehicle-loading">
+        Carregando veículo...
+      </div>
+
+      <div id="vehicleNotFound" class="vehicle-not-found hidden">
+        <strong>Veículo não encontrado.</strong>
+        <p>Este anúncio pode ter sido removido ou estar indisponível no momento.</p>
+        <a href="../estoque/estoque.html" class="sidebar-secondary vehicle-not-found-link">Voltar ao estoque</a>
+      </div>
+
+      <div id="vehicleContent" class="hidden">
+        <section class="vehicle-breadcrumbs">
+          <a href="../index.html#inicio">Início</a>
+          <span>•</span>
+          <a href="../estoque/estoque.html">Estoque</a>
+          <span>•</span>
+          <strong id="vehicleBreadcrumbTitle">Veículo</strong>
+        </section>
+
+        <section class="vehicle-gallery">
+          <div id="galleryGrid" class="gallery-grid"></div>
+        </section>
+
+        <div class="vehicle-layout">
+          <section class="vehicle-info">
+            <div class="vehicle-heading">
+              <div class="vehicle-heading-top">
+                <div class="vehicle-brand-line">
+                  <span id="vehicleBrand" class="vehicle-brand">Orion Veículos</span>
+                  <span id="vehicleStatusBadge" class="vehicle-status-badge status-disponivel">Disponível</span>
+                </div>
+
+                <div class="vehicle-price-card">
+                  <span>Valor anunciado</span>
+                  <strong id="vehiclePrice">-</strong>
+                </div>
+              </div>
+
+              <div class="vehicle-title-block">
+                <h1 id="vehicleTitle">Veículo</h1>
+                <p id="vehicleSubtitle">Detalhes do veículo</p>
+              </div>
+
+              <div class="vehicle-summary-chips" id="vehicleSummaryChips"></div>
+
+              <div class="vehicle-assurance-strip">
+                <div class="assurance-item">
+                  <i class="bi bi-patch-check-fill"></i>
+                  <span>Atendimento direto com a loja</span>
+                </div>
+                <div class="assurance-item">
+                  <i class="bi bi-images"></i>
+                  <span>Mais fotos e detalhes pelo WhatsApp</span>
+                </div>
+                <div class="assurance-item">
+                  <i class="bi bi-geo-alt-fill"></i>
+                  <span id="vehicleAssuranceLocation">Disponível em Teresina - PI</span>
+                </div>
+              </div>
+            </div>
+
+            <section class="vehicle-section">
+              <h2>Informações do veículo</h2>
+              <div id="specGrid" class="spec-grid"></div>
+            </section>
+
+            <section id="optionalSection" class="vehicle-section hidden">
+              <h2>Opcionais</h2>
+              <div id="optionalGrid" class="optional-grid"></div>
+            </section>
+
+            <section class="vehicle-section">
+              <h2>Descrição</h2>
+              <p id="vehicleDescription" class="vehicle-description">
+                Consulte nossa equipe para mais detalhes sobre este veículo.
+              </p>
+            </section>
+          </section>
+
+          <aside class="vehicle-sidebar">
+            <div class="contact-card">
+              <div class="contact-card-head">
+                <span class="contact-card-badge">Atendimento Orion</span>
+                <h2>Gostou deste veículo?</h2>
+                <p id="contactCardSubtitle">Fale com a loja para receber atendimento, mais fotos e detalhes da negociação.</p>
+              </div>
+
+              <a
+                id="sidebarMainAction"
+                class="sidebar-primary"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Enviar mensagem
+              </a>
+
+              <div class="sidebar-links">
+                <a id="sidebarWhatsapp" href="#" target="_blank" rel="noopener noreferrer">
+                  <i class="bi bi-whatsapp"></i>
+                  <span id="sidebarWhatsappText">(86) 99993-5385</span>
+                </a>
+
+                <a id="sidebarPhone" href="tel:5586999935385">
+                  <i class="bi bi-telephone-fill"></i>
+                  <span id="sidebarPhoneText">(86) 99993-5385</span>
+                </a>
+
+                <a id="sidebarAddress" href="#" target="_blank" rel="noopener noreferrer">
+                  <i class="bi bi-geo-alt-fill"></i>
+                  <span>Ver localização</span>
+                </a>
+              </div>
+
+              <button id="shareButton" type="button" class="sidebar-secondary">
+                <i class="bi bi-share-fill"></i>
+                <span>Compartilhar veículo</span>
+              </button>
+
+              <div class="contact-note">
+                <i class="bi bi-shield-check"></i>
+                <div>
+                  <strong>Atendimento rápido e direto</strong>
+                  <p id="contactNoteText">Receba retorno da equipe com mais informações sobre este anúncio.</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="shareToast" class="share-toast hidden" aria-live="polite"></div>
+
+  <div id="lightbox" class="lightbox hidden">
+    <button id="lightboxClose" class="lightbox-close" type="button" aria-label="Fechar">×</button>
+    <button id="lightboxPrev" class="lightbox-nav prev" type="button" aria-label="Imagem anterior">‹</button>
+    <img id="lightboxImage" src="" alt="Imagem ampliada do veículo" />
+    <button id="lightboxNext" class="lightbox-nav next" type="button" aria-label="Próxima imagem">›</button>
+  </div>
+
+  <script src="veiculo.js"></script>
+</body>
+</html>

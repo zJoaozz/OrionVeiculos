@@ -1,0 +1,1008 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Premium | Orion Veículos</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="dark-mode">
+  <div class="admin-login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="login-brand">
+        <h1>Orion Veículos</h1>
+        <p>Painel administrativo premium</p>
+      </div>
+
+      <form id="loginForm" class="login-form">
+        <label for="adminPassword">Senha do admin</label>
+        <input
+          type="password"
+          id="adminPassword"
+          placeholder="Digite a senha"
+          required
+        />
+        <button type="submit" class="btn-primary">Entrar no painel</button>
+        <p class="login-hint">Senha definida no backend em <strong>backend/.env</strong> via <strong>ADMIN_PASSWORD</strong>.</p>
+        <p id="loginError" class="login-error"></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-shell">
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <img
+          class="sidebar-logo"
+          src="../imagens/logo-orion-redonda.jpg"
+          alt="Logo Orion Veiculos"
+        />
+        <div>
+          <h1>Orion Ve&iacute;culos</h1>
+          <p>Gest&atilde;o da loja</p>
+        </div>
+      </div>
+
+      <nav class="admin-tabs" aria-label="Navegacao do painel">
+        <button class="admin-tab-button active" type="button" data-tab-target="dashboardTab">Dashboard</button>
+        <button class="admin-tab-button" type="button" data-tab-target="vehiclesTab">Ve&iacute;culos</button>
+        <button class="admin-tab-button" type="button" data-tab-target="categoriesTab">Categorias</button>
+        <button class="admin-tab-button" type="button" data-tab-target="homeTab">Home</button>
+        <button class="admin-tab-button" type="button" data-tab-target="esteticaTab">Est&eacute;tica</button>
+        <button class="admin-tab-button" type="button" data-tab-target="siteSettingsTab">Configura&ccedil;&otilde;es</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="themeToggle" class="theme-toggle theme-toggle-compact" type="button" aria-label="Alternar tema">
+          <span class="theme-icon">T</span>
+          <span class="theme-label">Tema</span>
+        </button>
+        <button id="logoutButton" class="btn-danger-outline" type="button">Sair</button>
+      </div>
+    </aside>
+
+  <header class="admin-topbar legacy-topbar">
+    <div class="container admin-nav">
+      <div class="brand-block">
+        <div>
+          <h1>Orion Veículos • Admin Premium</h1>
+          <p>Gerencie veículos, categorias, home e estética sem depender do código.</p>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <a href="../index.html" class="btn-secondary">Ver home</a>
+        <a href="../estoque/estoque.html" class="btn-secondary">Ver estoque</a>
+        <a href="../estetica/estetica.html" class="btn-secondary">Ver estética</a>
+
+        <button class="theme-toggle" type="button" aria-label="Alternar tema">
+          <span class="theme-icon">T</span>
+        </button>
+
+        <button class="btn-danger-outline" type="button">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <header class="admin-topbar admin-section-topbar">
+    <div class="brand-block">
+      <h1 id="currentSectionTitle">Dashboard</h1>
+      <p id="currentSectionSubtitle">Visao geral da loja, estoque e atalhos de gestao.</p>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn-primary quick-tab-action" type="button" data-tab-target="vehiclesTab" data-focus-car-form="true">
+        Novo ve&iacute;culo
+      </button>
+      <a href="../index.html" class="btn-secondary">Ver site</a>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="container dashboard-grid">
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-card stats-card">
+          <h2>Resumo</h2>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <span>Total</span>
+              <strong id="legacyTotalCars">0</strong>
+            </div>
+
+            <div class="stat-box">
+              <span>Destaques</span>
+              <strong id="legacyFeaturedCars">0</strong>
+            </div>
+
+            <div class="stat-box">
+              <span>Vendidos</span>
+              <strong id="legacySoldCars">0</strong>
+            </div>
+
+            <div class="stat-box">
+              <span>Disponíveis</span>
+              <strong id="legacyAvailableCars">0</strong>
+            </div>
+
+            <div class="stat-box">
+              <span>Categorias</span>
+              <strong id="legacyTotalCategories">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card compact-card">
+          <h3>Modo de trabalho</h3>
+          <p>
+            Painel dividido em áreas objetivas para manter o fluxo rápido e sem confusão.
+          </p>
+          <div class="compact-tags">
+            <span>Veículos</span>
+            <span>Categorias</span>
+            <span>Configurações do site</span>
+            <span>Home / Destaques</span>
+            <span>Estética</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="dashboard-main">
+        <div class="panel-card">
+          <div class="admin-tabs">
+            <button class="admin-tab-button active" type="button" data-tab-target="vehiclesTab">
+              Veículos
+            </button>
+            <button class="admin-tab-button" type="button" data-tab-target="categoriesTab">
+              Categorias
+            </button>
+            <button class="admin-tab-button" type="button" data-tab-target="siteSettingsTab">
+              Configurações do site
+            </button>
+            <button class="admin-tab-button" type="button" data-tab-target="homeTab">
+              Home / Destaques
+            </button>
+            <button class="admin-tab-button" type="button" data-tab-target="esteticaTab">
+              Estética
+            </button>
+          </div>
+
+          <div class="admin-tab-panels">
+            <!-- DASHBOARD -->
+            <div class="admin-tab-panel active" id="dashboardTab">
+              <div class="dashboard-overview">
+                <section class="summary-grid">
+                  <article class="summary-card"><span>Total de ve&iacute;culos</span><strong id="totalCars">0</strong></article>
+                  <article class="summary-card"><span>Dispon&iacute;veis</span><strong id="availableCars">0</strong></article>
+                  <article class="summary-card"><span>Reservados</span><strong id="reservedCars">0</strong></article>
+                  <article class="summary-card"><span>Vendidos</span><strong id="soldCars">0</strong></article>
+                  <article class="summary-card"><span>Categorias</span><strong id="totalCategories">0</strong></article>
+                  <article class="summary-card"><span>Destaques na home</span><strong id="featuredCars">0</strong></article>
+                </section>
+
+                <section class="inner-panel quick-actions-panel">
+                  <div class="panel-head">
+                    <div>
+                      <h2>Atalhos rapidos</h2>
+                      <p>Acesse as principais areas de gestao sem procurar nas abas.</p>
+                    </div>
+                  </div>
+                  <div class="quick-actions-grid">
+                    <button class="quick-action-card quick-tab-action" type="button" data-tab-target="vehiclesTab" data-focus-car-form="true"><strong>Cadastrar veiculo</strong><span>Novo anuncio no estoque</span></button>
+                    <button class="quick-action-card quick-tab-action" type="button" data-tab-target="categoriesTab"><strong>Editar categorias</strong><span>Organizar filtros e home</span></button>
+                    <button class="quick-action-card quick-tab-action" type="button" data-tab-target="homeTab"><strong>Configurar home</strong><span>Textos e destaques</span></button>
+                    <button class="quick-action-card quick-tab-action" type="button" data-tab-target="esteticaTab"><strong>Configurar estetica</strong><span>Conteudo da area de servicos</span></button>
+                    <button class="quick-action-card quick-tab-action" type="button" data-tab-target="siteSettingsTab"><strong>Configuracoes gerais</strong><span>Contato, cidade e mapa</span></button>
+                  </div>
+                </section>
+
+                <div class="dashboard-columns">
+                  <section class="inner-panel">
+                    <div class="panel-head">
+                      <div>
+                        <h2>Veiculos em destaque</h2>
+                        <p>Lista resumida dos anuncios destacados na home.</p>
+                      </div>
+                    </div>
+                    <div id="dashboardFeaturedList" class="featured-dashboard-list"></div>
+                  </section>
+
+                  <section class="inner-panel">
+                    <div class="panel-head">
+                      <div>
+                        <h2>Saude do estoque</h2>
+                        <p>Indicadores simples para revisar cadastros e disponibilidade.</p>
+                      </div>
+                    </div>
+                    <div class="stock-health-grid">
+                      <article class="health-card"><span>Disponiveis</span><strong id="healthAvailableCars">0</strong></article>
+                      <article class="health-card"><span>Vendidos</span><strong id="healthSoldCars">0</strong></article>
+                      <article class="health-card"><span>Reservados</span><strong id="healthReservedCars">0</strong></article>
+                      <article class="health-card"><span>Sem imagem</span><strong id="noImageCars">0</strong></article>
+                      <article class="health-card"><span>Sem preco</span><strong id="noPriceCars">0</strong></article>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-tab-panel" id="vehiclesTab">
+              <div class="vehicles-layout">
+                <section class="inner-panel">
+                  <div class="panel-head">
+                    <div>
+                      <h2>Cadastrar / editar veículo</h2>
+                      <p>Preencha os dados para exibir o carro na home e no estoque.</p>
+                    </div>
+                    <span class="pill" id="formMode">Novo cadastro</span>
+                  </div>
+
+                  <form id="carForm" class="car-form" novalidate>
+                    <input type="hidden" id="carId" />
+
+                    <div class="form-grid">
+                      <div class="field">
+                        <label for="titulo">Título</label>
+                        <input type="text" id="titulo" placeholder="Ex: Volkswagen Voyage 1.0" />
+                      </div>
+
+                      <div class="field">
+                        <label for="marca">Marca</label>
+                        <input type="text" id="marca" placeholder="Ex: Volkswagen" />
+                      </div>
+
+                      <div class="field">
+                        <label for="modelo">Modelo</label>
+                        <input type="text" id="modelo" placeholder="Ex: Voyage" />
+                      </div>
+
+                      <div class="field">
+                        <label for="ano">Ano</label>
+                        <input type="text" id="ano" placeholder="Ex: 2022/2023" />
+                      </div>
+
+                      <div class="field">
+                        <label for="combustivel">Combustível</label>
+                        <input type="text" id="combustivel" placeholder="Ex: Flex" />
+                      </div>
+
+                      <div class="field">
+                        <label for="km">KM</label>
+                        <input type="text" id="km" placeholder="Ex: 95.000 km" />
+                      </div>
+
+                      <div class="field">
+                        <label for="preco">Preço</label>
+                        <input type="text" id="preco" placeholder="Ex: R$ 61.900,00" />
+                      </div>
+
+                      <div class="field">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" id="cidade" placeholder="Ex: Teresina - PI" />
+                      </div>
+
+                      <div class="field">
+                        <label for="categoria">Categoria</label>
+                        <select id="categoria">
+                          <option value="">Selecione</option>
+                        </select>
+                      </div>
+
+                      <div class="field">
+                        <label for="status">Status</label>
+                        <select id="status">
+                          <option value="disponivel">Disponível</option>
+                          <option value="reservado">Reservado</option>
+                          <option value="vendido">Vendido</option>
+                        </select>
+                      </div>
+
+                      <div class="field">
+                        <label for="tag">Tag visível</label>
+                        <input type="text" id="tag" placeholder="Ex: Automático" />
+                      </div>
+
+                      <div class="field">
+                        <label for="ordem">Ordem de exibição</label>
+                        <input type="number" id="ordem" placeholder="Ex: 1" min="0" />
+                      </div>
+
+                      <div class="field full field-check">
+                        <label for="destaque">Destaque principal</label>
+                        <div class="toggle-line">
+                          <input type="checkbox" id="destaque" />
+                          <span>Mostrar como destaque principal</span>
+                        </div>
+                      </div>
+
+                      <div class="field full field-check">
+                        <label for="destaqueHome">Carros em destaque na home</label>
+                        <div class="toggle-line">
+                          <input type="checkbox" id="destaqueHome" />
+                          <span>Mostrar na seção “Carros em destaque” da home</span>
+                        </div>
+                      </div>
+
+                      <div class="field full">
+                        <label for="descricao">Descrição do veículo</label>
+                        <textarea
+                          id="descricao"
+                          placeholder="Ex: Veículo muito conservado, revisado, baixa km, pronto para transferência."
+                        ></textarea>
+                      </div>
+
+                      <div class="field full">
+                        <label for="opcionais">Opcionais</label>
+                        <textarea
+                          id="opcionais"
+                          placeholder="Ex: ar-condicionado, direção elétrica, central multimídia, câmera de ré"
+                        ></textarea>
+                      </div>
+
+                      <div class="field full">
+                        <label for="tags">Tags de busca</label>
+                        <input
+                          type="text"
+                          id="tags"
+                          placeholder="Ex: automatico economico sedan volkswagen voyage"
+                        />
+                      </div>
+
+                      <div class="field full">
+                        <label for="whatsappText">Texto do WhatsApp</label>
+                        <input
+                          type="text"
+                          id="whatsappText"
+                          placeholder="Ex: Olá! Tenho interesse no Volkswagen Voyage 1.0 Automático 2022."
+                        />
+                      </div>
+
+                      <div class="field full image-section">
+                        <div class="image-section-head">
+                          <div>
+                            <label class="image-title">Imagens do veículo</label>
+                            <p class="image-subtitle">
+                              Faça upload direto e escolha a capa principal do carro.
+                            </p>
+                          </div>
+
+                          <button
+                            type="button"
+                            class="btn-secondary upload-inline-button"
+                            id="openImageUploader"
+                          >
+                            Upload
+                          </button>
+                        </div>
+
+                        <input
+                          type="file"
+                          id="imageUploader"
+                          class="file-input-hidden"
+                          accept="image/*"
+                          multiple
+                        />
+
+                        <div class="image-toolbar">
+                          <span id="selectedImagesCount">0 imagem(ns)</span>
+                          <span id="imageUploadStatus" class="upload-status" aria-live="polite"></span>
+                        </div>
+
+                        <div id="imagesUnifiedList" class="images-unified-list">
+                          <p class="empty-message">Nenhuma imagem enviada ainda.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-actions">
+                      <button type="submit" class="btn-primary" id="saveButton">Salvar carro</button>
+                      <button type="button" class="btn-secondary" id="cancelEdit">Cancelar</button>
+                      <button type="button" class="btn-danger" id="resetAllCars">Resetar carros padrão</button>
+                    </div>
+                  </form>
+                </section>
+
+                <section class="inner-panel">
+                  <div class="panel-head">
+                    <div>
+                      <h2>Veículos cadastrados</h2>
+                      <p>Edite, exclua e filtre sem precisar rolar a página inteira.</p>
+                    </div>
+                  </div>
+
+                  <div class="admin-filters">
+                    <div class="field">
+                      <label for="adminSearchInput">Buscar no admin</label>
+                      <input
+                        type="text"
+                        id="adminSearchInput"
+                        placeholder="Buscar por título, marca, modelo..."
+                      />
+                    </div>
+
+                    <div class="field">
+                      <label for="adminStatusFilter">Filtrar por status</label>
+                      <select id="adminStatusFilter">
+                        <option value="todos">Todos</option>
+                        <option value="disponivel">Disponível</option>
+                        <option value="reservado">Reservado</option>
+                        <option value="vendido">Vendido</option>
+                      </select>
+                    </div>
+
+                    <div class="field">
+                      <label for="adminCategoryFilter">Filtrar por categoria</label>
+                      <select id="adminCategoryFilter">
+                        <option value="todos">Todas</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div id="carsListStatus" class="list-status hidden" aria-live="polite"></div>
+                  <div id="carsList" class="cars-list"></div>
+                </section>
+              </div>
+            </div>
+
+            <!-- CATEGORIAS -->
+            <div class="admin-tab-panel" id="categoriesTab">
+              <div class="categories-layout">
+                <section class="inner-panel">
+                  <div class="panel-head">
+                    <div>
+                      <h2>Gerenciar categorias</h2>
+                      <p>Configure as categorias exibidas na home e no filtro do estoque.</p>
+                    </div>
+                  </div>
+
+                  <form id="categoryForm" class="category-form" novalidate>
+                    <input type="hidden" id="categoryId" />
+
+                    <div class="form-grid">
+                      <div class="field">
+                        <label for="categoryName">Nome</label>
+                        <input type="text" id="categoryName" placeholder="Ex: Sedans" />
+                      </div>
+
+                      <div class="field">
+                        <label for="categorySlug">Slug</label>
+                        <input type="text" id="categorySlug" placeholder="Ex: sedan" />
+                      </div>
+
+                      <div class="field">
+                        <label for="categoryOrder">Ordem</label>
+                        <input type="number" id="categoryOrder" min="0" placeholder="Ex: 1" />
+                      </div>
+
+                      <div class="field full image-section">
+                        <div class="image-section-head">
+                          <div>
+                            <label class="image-title">Imagem da categoria</label>
+                            <p class="image-subtitle">
+                              Faça o upload da imagem que será exibida na home.
+                            </p>
+                          </div>
+
+                          <button
+                            type="button"
+                            class="btn-secondary upload-inline-button"
+                            id="openCategoryUploader"
+                          >
+                            Upload
+                          </button>
+                        </div>
+
+                        <input
+                          type="file"
+                          id="categoryImageUpload"
+                          class="file-input-hidden"
+                          accept="image/*"
+                        />
+
+                        <div id="categoryImagePreview" class="images-unified-list">
+                          <p class="empty-message">Nenhuma imagem selecionada.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-actions">
+                      <button type="submit" class="btn-primary">Salvar categoria</button>
+                      <button type="button" class="btn-secondary" id="categoryCancelEdit">Cancelar</button>
+                    </div>
+                  </form>
+                </section>
+
+                <section class="inner-panel">
+                  <div class="panel-head">
+                    <div>
+                      <h2>Categorias cadastradas</h2>
+                      <p>Edite ou exclua as categorias da home e do estoque.</p>
+                    </div>
+                  </div>
+
+                  <div id="categoriesListStatus" class="list-status hidden" aria-live="polite"></div>
+                  <div id="categoriesList" class="cars-list"></div>
+                </section>
+              </div>
+            </div>
+
+            <!-- CONFIGURAÇÕES DO SITE -->
+            <div class="admin-tab-panel" id="siteSettingsTab">
+              <div class="single-layout">
+                <section class="inner-panel">
+                  <div class="panel-head">
+                    <div>
+                      <h2>Configurações do site</h2>
+                      <p>Informações principais da Orion Veículos.</p>
+                    </div>
+                  </div>
+
+                  <form id="siteSettingsForm" novalidate>
+                    <div class="form-grid">
+                      <div class="field">
+                        <label for="siteWhatsapp">WhatsApp</label>
+                        <input type="text" id="siteWhatsapp" placeholder="Ex: 5586999999999" />
+                      </div>
+
+                      <div class="field">
+                        <label for="siteInstagram">Instagram</label>
+                        <input type="text" id="siteInstagram" placeholder="Link do Instagram" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="siteAddress">Endereço</label>
+                        <input type="text" id="siteAddress" placeholder="Endereço principal da loja" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="siteMapUrl">Link / Embed do mapa</label>
+                        <input type="text" id="siteMapUrl" placeholder="URL do mapa" />
+                      </div>
+
+                      <div class="field">
+                        <label for="sitePhoneDisplay">Telefone exibido</label>
+                        <input type="text" id="sitePhoneDisplay" placeholder="Ex: (86) 99999-9999" />
+                      </div>
+
+                      <div class="field">
+                        <label for="siteCityDisplay">Cidade exibida</label>
+                        <input type="text" id="siteCityDisplay" placeholder="Ex: Teresina - PI" />
+                      </div>
+                    </div>
+
+                    <div class="form-actions">
+                      <button type="submit" class="btn-primary">Salvar configurações</button>
+                      <button type="button" class="btn-secondary" id="resetSiteSettings">Restaurar padrão</button>
+                    </div>
+                  </form>
+                </section>
+              </div>
+            </div>
+
+            <!-- HOME -->
+            <div class="admin-tab-panel" id="homeTab">
+              <div class="single-layout">
+                <section class="inner-panel">
+                  <div class="panel-head">
+                    <div>
+                      <h2>Home / Destaques</h2>
+                      <p>Edite os textos principais da página inicial.</p>
+                    </div>
+                  </div>
+
+                  <form id="homeSettingsForm" novalidate>
+                    <div class="form-grid">
+                      <div class="field full">
+                        <label for="homeBadge">Badge principal</label>
+                        <input type="text" id="homeBadge" placeholder="Texto pequeno acima do título" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="homeTitle">Título principal</label>
+                        <input type="text" id="homeTitle" placeholder="Título principal da home" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="homeSubtitle">Subtítulo principal</label>
+                        <textarea id="homeSubtitle" placeholder="Subtítulo da home"></textarea>
+                      </div>
+
+                      <div class="field">
+                        <label for="homePrimaryButtonText">Texto do botão principal</label>
+                        <input type="text" id="homePrimaryButtonText" placeholder="Ex: Ver estoque" />
+                      </div>
+
+                      <div class="field">
+                        <label for="homeSecondaryButtonText">Texto do botão secundário</label>
+                        <input type="text" id="homeSecondaryButtonText" placeholder="Ex: Falar com a loja" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="homeWhyTitle">Título da seção “Por que Orion?”</label>
+                        <input type="text" id="homeWhyTitle" placeholder="Título da seção" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="homeWhySubtitle">Subtítulo da seção “Por que Orion?”</label>
+                        <textarea id="homeWhySubtitle" placeholder="Subtítulo da seção"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="form-actions">
+                      <button type="submit" class="btn-primary">Salvar home</button>
+                      <button type="button" class="btn-secondary" id="resetHomeSettings">Restaurar padrão</button>
+                    </div>
+                  </form>
+                </section>
+              </div>
+            </div>
+
+            <!-- ESTÉTICA -->
+            <div class="admin-tab-panel" id="esteticaTab">
+              <div class="single-layout">
+                <section class="inner-panel">
+                  <div class="panel-head">
+                    <div>
+                      <h2>Estética Automotiva</h2>
+                      <p>Edite apenas o essencial, sem poluir o painel.</p>
+                    </div>
+                    <span class="pill">Modo enxuto</span>
+                  </div>
+
+                  <form id="esteticaSettingsForm" novalidate>
+                    <div class="form-grid">
+                      <!-- HERO -->
+                      <div class="field full">
+                        <label for="esteticaHeroBadge">Badge do hero</label>
+                        <input type="text" id="esteticaHeroBadge" placeholder="Ex: Cuidado premium • Acabamento profissional" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="esteticaHeroTitle">Título do hero</label>
+                        <input type="text" id="esteticaHeroTitle" placeholder="Ex: Orion Estética Automotiva" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="esteticaHeroSubtitle">Subtítulo do hero</label>
+                        <textarea id="esteticaHeroSubtitle" placeholder="Texto principal da seção hero"></textarea>
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaHeroPrimaryButtonText">Texto do botão principal do hero</label>
+                        <input type="text" id="esteticaHeroPrimaryButtonText" placeholder="Ex: Solicitar atendimento" />
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaHeroSecondaryButtonText">Texto do botão secundário do hero</label>
+                        <input type="text" id="esteticaHeroSecondaryButtonText" placeholder="Ex: Ver Instagram" />
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaHeroPrimaryButtonUrl">Link do botão principal do hero</label>
+                        <input type="text" id="esteticaHeroPrimaryButtonUrl" placeholder="URL do botão principal" />
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaHeroSecondaryButtonUrl">Link do botão secundário do hero</label>
+                        <input type="text" id="esteticaHeroSecondaryButtonUrl" placeholder="URL do botão secundário" />
+                      </div>
+
+                      <div class="field full image-section">
+                        <div class="image-section-head">
+                          <div>
+                            <label class="image-title">Imagem do hero</label>
+                            <p class="image-subtitle">Imagem principal exibida no card da estética.</p>
+                          </div>
+
+                          <button
+                            type="button"
+                            class="btn-secondary upload-inline-button"
+                            id="openEsteticaHeroUploader"
+                          >
+                            Upload
+                          </button>
+                        </div>
+
+                        <input
+                          type="file"
+                          id="esteticaHeroImageUpload"
+                          class="file-input-hidden"
+                          accept="image/*"
+                        />
+
+                        <div id="esteticaHeroImagePreview" class="images-unified-list">
+                          <p class="empty-message">Nenhuma imagem do hero enviada.</p>
+                        </div>
+                      </div>
+
+                      <!-- SERVIÇOS - SEÇÃO -->
+                      <div class="field full">
+                        <label for="esteticaServicesTitle">Título da seção de serviços</label>
+                        <input type="text" id="esteticaServicesTitle" placeholder="Ex: Nossos serviços" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="esteticaServicesSubtitle">Subtítulo da seção de serviços</label>
+                        <textarea id="esteticaServicesSubtitle" placeholder="Subtítulo da seção de serviços"></textarea>
+                      </div>
+
+                      <div class="field full">
+                        <label>Serviços oferecidos</label>
+                        <div id="esteticaServicesList" class="services-admin-list"></div>
+
+                        <div class="form-actions" style="margin-top: 14px;">
+                          <button type="button" class="btn-secondary" id="addEsteticaService">
+                            Adicionar serviço
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- PROCESSO -->
+                      <div class="field full">
+                        <label for="esteticaProcessTitle">Título da seção “Como funciona”</label>
+                        <input type="text" id="esteticaProcessTitle" placeholder="Ex: Como funciona" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="esteticaProcessSubtitle">Subtítulo da seção “Como funciona”</label>
+                        <textarea id="esteticaProcessSubtitle" placeholder="Subtítulo da seção Como funciona"></textarea>
+                      </div>
+
+                      <!-- GALERIA -->
+                      <div class="field full">
+                        <label for="esteticaGalleryTitle">Título da apresentação visual</label>
+                        <input type="text" id="esteticaGalleryTitle" placeholder="Ex: Apresentação visual" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="esteticaGallerySubtitle">Subtítulo da apresentação visual</label>
+                        <textarea id="esteticaGallerySubtitle" placeholder="Subtítulo da apresentação visual"></textarea>
+                      </div>
+
+                      <div class="field full image-section">
+                        <div class="image-section-head">
+                          <div>
+                            <label class="image-title">Imagem principal da apresentação visual</label>
+                            <p class="image-subtitle">Imagem grande da galeria.</p>
+                          </div>
+
+                          <button
+                            type="button"
+                            class="btn-secondary upload-inline-button"
+                            id="openEsteticaGalleryMainUploader"
+                          >
+                            Upload
+                          </button>
+                        </div>
+
+                        <input
+                          type="file"
+                          id="esteticaGalleryMainImageUpload"
+                          class="file-input-hidden"
+                          accept="image/*"
+                        />
+
+                        <div id="esteticaGalleryMainImagePreview" class="images-unified-list">
+                          <p class="empty-message">Nenhuma imagem principal enviada.</p>
+                        </div>
+                      </div>
+
+                      <div class="field full">
+                        <label>Imagens menores da apresentação visual</label>
+                      </div>
+
+                      <div class="field image-section">
+                        <div class="image-section-head">
+                          <div>
+                            <label class="image-title">Imagem 1</label>
+                          </div>
+
+                          <button
+                            type="button"
+                            class="btn-secondary upload-inline-button"
+                            id="openEsteticaGallery1Uploader"
+                          >
+                            Upload
+                          </button>
+                        </div>
+
+                        <input
+                          type="file"
+                          id="esteticaGallery1ImageUpload"
+                          class="file-input-hidden"
+                          accept="image/*"
+                        />
+
+                        <div id="esteticaGallery1ImagePreview" class="images-unified-list">
+                          <p class="empty-message">Nenhuma imagem enviada.</p>
+                        </div>
+                      </div>
+
+                      <div class="field image-section">
+                        <div class="image-section-head">
+                          <div>
+                            <label class="image-title">Imagem 2</label>
+                          </div>
+
+                          <button
+                            type="button"
+                            class="btn-secondary upload-inline-button"
+                            id="openEsteticaGallery2Uploader"
+                          >
+                            Upload
+                          </button>
+                        </div>
+
+                        <input
+                          type="file"
+                          id="esteticaGallery2ImageUpload"
+                          class="file-input-hidden"
+                          accept="image/*"
+                        />
+
+                        <div id="esteticaGallery2ImagePreview" class="images-unified-list">
+                          <p class="empty-message">Nenhuma imagem enviada.</p>
+                        </div>
+                      </div>
+
+                      <div class="field image-section">
+                        <div class="image-section-head">
+                          <div>
+                            <label class="image-title">Imagem 3</label>
+                          </div>
+
+                          <button
+                            type="button"
+                            class="btn-secondary upload-inline-button"
+                            id="openEsteticaGallery3Uploader"
+                          >
+                            Upload
+                          </button>
+                        </div>
+
+                        <input
+                          type="file"
+                          id="esteticaGallery3ImageUpload"
+                          class="file-input-hidden"
+                          accept="image/*"
+                        />
+
+                        <div id="esteticaGallery3ImagePreview" class="images-unified-list">
+                          <p class="empty-message">Nenhuma imagem enviada.</p>
+                        </div>
+                      </div>
+
+                      <div class="field image-section">
+                        <div class="image-section-head">
+                          <div>
+                            <label class="image-title">Imagem 4</label>
+                          </div>
+
+                          <button
+                            type="button"
+                            class="btn-secondary upload-inline-button"
+                            id="openEsteticaGallery4Uploader"
+                          >
+                            Upload
+                          </button>
+                        </div>
+
+                        <input
+                          type="file"
+                          id="esteticaGallery4ImageUpload"
+                          class="file-input-hidden"
+                          accept="image/*"
+                        />
+
+                        <div id="esteticaGallery4ImagePreview" class="images-unified-list">
+                          <p class="empty-message">Nenhuma imagem enviada.</p>
+                        </div>
+                      </div>
+
+                      <!-- CTA -->
+                      <div class="field full">
+                        <label for="esteticaCtaBadge">Badge do CTA</label>
+                        <input type="text" id="esteticaCtaBadge" placeholder="Ex: Atendimento rápido" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="esteticaCtaTitle">Título do CTA</label>
+                        <input type="text" id="esteticaCtaTitle" placeholder="Ex: Quer cuidar melhor do seu carro?" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="esteticaCtaSubtitle">Subtítulo do CTA</label>
+                        <textarea id="esteticaCtaSubtitle" placeholder="Texto do CTA"></textarea>
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaCtaPrimaryButtonText">Texto do botão principal do CTA</label>
+                        <input type="text" id="esteticaCtaPrimaryButtonText" placeholder="Ex: Chamar no WhatsApp" />
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaCtaSecondaryButtonText">Texto do botão secundário do CTA</label>
+                        <input type="text" id="esteticaCtaSecondaryButtonText" placeholder="Ex: Instagram da estética" />
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaCtaPrimaryButtonUrl">Link do botão principal do CTA</label>
+                        <input type="text" id="esteticaCtaPrimaryButtonUrl" placeholder="URL do botão principal" />
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaCtaSecondaryButtonUrl">Link do botão secundário do CTA</label>
+                        <input type="text" id="esteticaCtaSecondaryButtonUrl" placeholder="URL do botão secundário" />
+                      </div>
+
+                      <!-- LOCALIZAÇÃO -->
+                      <div class="field full">
+                        <label for="esteticaLocationTitle">Título da localização</label>
+                        <input type="text" id="esteticaLocationTitle" placeholder="Ex: Onde estamos" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="esteticaLocationSubtitle">Subtítulo da localização</label>
+                        <textarea id="esteticaLocationSubtitle" placeholder="Subtítulo da localização"></textarea>
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaLocationName">Nome da unidade</label>
+                        <input type="text" id="esteticaLocationName" placeholder="Ex: Orion Estética Automotiva" />
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaLocationLabel">Rótulo da unidade</label>
+                        <input type="text" id="esteticaLocationLabel" placeholder="Ex: Localização da unidade" />
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaLocationAddress1">Endereço linha 1</label>
+                        <input type="text" id="esteticaLocationAddress1" placeholder="Ex: Av. João XXIII, 1503" />
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaLocationAddress2">Endereço linha 2</label>
+                        <input type="text" id="esteticaLocationAddress2" placeholder="Ex: São Cristóvão, Teresina - PI" />
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaLocationInstagram">Instagram exibido</label>
+                        <input type="text" id="esteticaLocationInstagram" placeholder="Ex: @orionestetica2004" />
+                      </div>
+
+                      <div class="field">
+                        <label for="esteticaLocationWhatsapp">WhatsApp da estética</label>
+                        <input type="text" id="esteticaLocationWhatsapp" placeholder="Ex: 5586999999999" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="esteticaLocationMapsUrl">Link do Maps</label>
+                        <input type="text" id="esteticaLocationMapsUrl" placeholder="URL para abrir no Maps" />
+                      </div>
+
+                      <div class="field full">
+                        <label for="esteticaLocationMapEmbed">Embed do mapa</label>
+                        <input type="text" id="esteticaLocationMapEmbed" placeholder="URL embed do mapa" />
+                      </div>
+                    </div>
+
+                    <div class="form-actions">
+                      <button type="submit" class="btn-primary">Salvar estética</button>
+                      <button type="button" class="btn-secondary" id="resetEsteticaSettings">Restaurar padrão</button>
+                    </div>
+                  </form>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  </div>
+
+  <div id="adminToast" class="admin-toast hidden" aria-live="polite"></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

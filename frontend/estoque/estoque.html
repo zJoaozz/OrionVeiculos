@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estoque | Orion Veículos</title>
+  <link rel="stylesheet" href="estoque.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="../index.html#inicio" class="brand">
+        <img
+          src="../imagens/logo-orion-redonda.jpg"
+          alt="Logo Orion Veículos"
+          class="brand-logo"
+        />
+        <div class="brand-text">
+          <strong>Orion Veículos</strong>
+          <span>Novos e seminovos com confiança</span>
+        </div>
+      </a>
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+        aria-controls="navLinks"
+        title="Menu"
+      >
+        <i class="bi bi-list"></i>
+      </button>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="../index.html#inicio">Início</a>
+        <a href="estoque.html" class="active">Estoque</a>
+        <a href="../index.html#categorias">Categorias</a>
+        <a href="../index.html#destaques">Destaques</a>
+        <a href="../index.html#beneficios">Por que Orion</a>
+        <a href="../index.html#localizacao">Localização</a>
+        <a href="../index.html#contato">Contato</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a
+          class="btn-instagram"
+          id="navInstagramLink"
+          href="https://www.instagram.com/orionveiculos2004/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram da Orion Veículos"
+          title="Instagram"
+        >
+          <i class="bi bi-instagram"></i>
+        </a>
+
+        <a
+          class="btn-whatsapp subtle icon-only"
+          id="navWhatsappLink"
+          href="https://wa.me/5586999935385?text=Olá! Quero atendimento da Orion Veículos."
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="WhatsApp da Orion Veículos"
+          title="WhatsApp"
+        >
+          <i class="bi bi-whatsapp"></i>
+        </a>
+
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Alternar tema">
+          <span class="theme-icon">☾</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+  <div class="mobile-filters-overlay" id="mobileFiltersOverlay"></div>
+
+  <main class="stock-page">
+    <section class="stock-hero">
+      <div class="container stock-hero-inner">
+        <span class="hero-badge">Estoque atualizado</span>
+        <h1>Encontre o veículo ideal para você</h1>
+        <p>
+          Pesquise por marca, modelo, combustível, categoria e faixa de preço
+          com uma experiência mais clara, profissional e direta.
+        </p>
+      </div>
+    </section>
+
+    <section class="stock-main">
+      <div class="container stock-layout">
+        <aside class="filters-card" id="filtersCard">
+          <div class="filters-mobile-head">
+            <div>
+              <h2>Filtros</h2>
+              <p>Refine sua busca com mais precisão.</p>
+            </div>
+
+            <button
+              class="filters-close"
+              id="closeFiltersButton"
+              type="button"
+              aria-label="Fechar filtros"
+              title="Fechar filtros"
+            >
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <div class="field">
+            <label for="stockSearchInput">Busca</label>
+            <input type="text" id="stockSearchInput" placeholder="Marca, modelo ou versão" />
+          </div>
+
+          <div class="field">
+            <label for="brandFilter">Marca</label>
+            <select id="brandFilter">
+              <option value="todos">Todas</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="categoryFilter">Categoria</label>
+            <select id="categoryFilter">
+              <option value="todos">Todas</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="fuelFilter">Combustível</label>
+            <select id="fuelFilter">
+              <option value="todos">Todos</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="todos">Todos</option>
+              <option value="disponivel">Disponível</option>
+              <option value="reservado">Reservado</option>
+              <option value="vendido">Vendido</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="priceFilter">Faixa de preço</label>
+            <select id="priceFilter">
+              <option value="todos">Todas</option>
+              <option value="ate80000">Até R$ 80 mil</option>
+              <option value="80001a120000">R$ 80 mil a R$ 120 mil</option>
+              <option value="120001a170000">R$ 120 mil a R$ 170 mil</option>
+              <option value="acima170000">Acima de R$ 170 mil</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="sortFilter">Ordenação</label>
+            <select id="sortFilter">
+              <option value="ordem">Destaques da vitrine</option>
+              <option value="menor-preco">Menor preço</option>
+              <option value="maior-preco">Maior preço</option>
+              <option value="menor-km">Menor KM</option>
+              <option value="marca">Marca</option>
+            </select>
+          </div>
+
+          <div class="filters-actions">
+            <button class="btn-primary" id="applyFiltersButton" type="button">Aplicar filtros</button>
+            <button class="btn-secondary" id="clearFiltersButton" type="button">Limpar filtros</button>
+          </div>
+        </aside>
+
+        <section class="stock-results">
+          <div class="stock-toolbar">
+            <div class="stock-toolbar-left">
+              <span class="toolbar-mini-badge">Estoque completo</span>
+              <h2>Veículos disponíveis</h2>
+              <p id="resultsCount">0 veículos encontrados</p>
+            </div>
+
+            <div class="stock-toolbar-actions">
+              <button
+                class="btn-secondary filters-mobile-button"
+                id="openFiltersButton"
+                type="button"
+              >
+                <i class="bi bi-sliders"></i>
+                <span>Filtros</span>
+              </button>
+
+              <a
+                class="btn-instagram toolbar-social"
+                id="toolbarInstagramLink"
+                href="https://www.instagram.com/orionveiculos2004/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram da Orion Veículos"
+              >
+                <i class="bi bi-instagram"></i>
+              </a>
+
+              <a
+                class="btn-primary toolbar-whatsapp"
+                id="toolbarWhatsappLink"
+                href="https://wa.me/5586999935385?text=Olá! Quero atendimento da Orion Veículos."
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="bi bi-whatsapp"></i>
+                <span>Quero atendimento</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="active-filters" id="activeFilters"></div>
+          <div id="stockStatusMessage" class="stock-status-message hidden" aria-live="polite"></div>
+          <div class="cars-grid" id="stockCarsGrid"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="estoque.js"></script>
+</body>
+</html>
