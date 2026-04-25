@@ -4,6 +4,13 @@ const fs = require("fs");
 
 const uploadDir = path.join(__dirname, "..", "uploads");
 
+const allowedExtensions = new Set([".jpg", ".jpeg", ".png", ".webp"]);
+const allowedMimeTypes = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp"
+]);
+
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -14,29 +21,50 @@ function sanitizeFileName(name) {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-zA-Z0-9.-]/g, "-")
     .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
     .toLowerCase();
+}
+
+function getSafeExtension(originalName) {
+  return path.extname(originalName || "").toLowerCase();
 }
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
   },
+
   filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname || "");
+    const ext = getSafeExtension(file.originalname);
+
+    if (!allowedExtensions.has(ext)) {
+      return cb(new Error("Extensão de arquivo não permitida."));
+    }
+
     const baseName = path.basename(file.originalname || "imagem", ext);
     const safeName = sanitizeFileName(baseName) || "imagem";
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const uniqueSuffix = `${Date.now()}-${cryptoRandomSuffix()}`;
 
-    cb(null, `${safeName}-${uniqueSuffix}${ext.toLowerCase()}`);
+    cb(null, `${safeName}-${uniqueSuffix}${ext}`);
   }
 });
 
+function cryptoRandomSuffix() {
+  return Math.random().toString(36).slice(2, 10);
+}
+
 const fileFilter = (req, file, cb) => {
-  if (!file.mimetype || !file.mimetype.startsWith("image/")) {
-    return cb(new Error("Apenas arquivos de imagem são permitidos."));
+  const ext = getSafeExtension(file.originalname);
+
+  if (!allowedExtensions.has(ext)) {
+    return cb(new Error("Formato não permitido. Use JPG, PNG ou WEBP."));
   }
 
-  cb(null, true);
+  if (!allowedMimeTypes.has(file.mimetype)) {
+    return cb(new Error("Tipo de imagem não permitido."));
+  }
+
+  return cb(null, true);
 };
 
 const upload = multer({
@@ -44,7 +72,7 @@ const upload = multer({
   fileFilter,
   limits: {
     files: 20,
-    fileSize: 10 * 1024 * 1024
+    fileSize: 5 * 1024 * 1024
   }
 });
 
