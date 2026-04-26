@@ -63,6 +63,10 @@ const locationInstagram = document.getElementById("locationInstagram");
 const mapsOpenButton = document.getElementById("mapsOpenButton");
 const locationWhatsappButton = document.getElementById("locationWhatsappButton");
 const locationMapFrame = document.getElementById("locationMapFrame");
+
+const mobileFloatingCta = document.getElementById("mobileFloatingCta");
+const mobileFloatingWhatsapp = document.getElementById("mobileFloatingWhatsapp");
+
 let esteticaSettingsCache = null;
 
 /* =========================
@@ -668,6 +672,17 @@ function applyEsteticaSettings() {
 
   if (locationMapFrame && embedUrl) {
     locationMapFrame.src = embedUrl;
+  }
+
+  if (mobileFloatingWhatsapp) {
+    mobileFloatingWhatsapp.href = buildWhatsappLink(
+      settings.location.whatsapp,
+      "Olá! Quero saber sobre estética automotiva."
+    );
+  }
+
+  if (mobileFloatingCta) {
+    mobileFloatingCta.classList.remove("hidden");
   }
 }
 

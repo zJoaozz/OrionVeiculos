@@ -101,6 +101,24 @@
 
               <div class="vehicle-summary-chips" id="vehicleSummaryChips"></div>
 
+              <div class="vehicle-main-cta">
+                <a
+                  id="vehicleMainWhatsapp"
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="vehicle-main-whatsapp"
+                >
+                  <i class="bi bi-whatsapp"></i>
+                  <span>Chamar no WhatsApp</span>
+                </a>
+
+                <button id="vehicleMainShare" type="button" class="vehicle-main-share">
+                  <i class="bi bi-share-fill"></i>
+                  <span>Compartilhar</span>
+                </button>
+              </div>
+
               <div class="vehicle-assurance-strip">
                 <div class="assurance-item">
                   <i class="bi bi-patch-check-fill"></i>
@@ -117,18 +135,24 @@
               </div>
             </div>
 
-            <section class="vehicle-section">
-              <h2>Informações do veículo</h2>
+            <section class="vehicle-section compact-section">
+              <div class="section-title-row">
+                <h2>Informações do veículo</h2>
+              </div>
               <div id="specGrid" class="spec-grid"></div>
             </section>
 
-            <section id="optionalSection" class="vehicle-section hidden">
-              <h2>Opcionais</h2>
+            <section id="optionalSection" class="vehicle-section compact-section hidden">
+              <div class="section-title-row">
+                <h2>Opcionais</h2>
+              </div>
               <div id="optionalGrid" class="optional-grid"></div>
             </section>
 
-            <section class="vehicle-section">
-              <h2>Descrição</h2>
+            <section class="vehicle-section compact-section">
+              <div class="section-title-row">
+                <h2>Descrição</h2>
+              </div>
               <p id="vehicleDescription" class="vehicle-description">
                 Consulte nossa equipe para mais detalhes sobre este veículo.
               </p>
@@ -188,6 +212,23 @@
       </div>
     </div>
   </main>
+
+  <div id="mobileFloatingCta" class="mobile-floating-cta hidden">
+    <div>
+      <span id="mobileFloatingPrice">-</span>
+      <strong id="mobileFloatingTitle">Veículo</strong>
+    </div>
+
+    <a
+      id="mobileFloatingWhatsapp"
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <i class="bi bi-whatsapp"></i>
+      <span>WhatsApp</span>
+    </a>
+  </div>
 
   <div id="shareToast" class="share-toast hidden" aria-live="polite"></div>
 

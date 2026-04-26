@@ -47,6 +47,14 @@ const shareButton = document.getElementById("shareButton");
 const contactNoteText = document.getElementById("contactNoteText");
 const shareToast = document.getElementById("shareToast");
 
+const vehicleMainWhatsapp = document.getElementById("vehicleMainWhatsapp");
+const vehicleMainShare = document.getElementById("vehicleMainShare");
+
+const mobileFloatingCta = document.getElementById("mobileFloatingCta");
+const mobileFloatingPrice = document.getElementById("mobileFloatingPrice");
+const mobileFloatingTitle = document.getElementById("mobileFloatingTitle");
+const mobileFloatingWhatsapp = document.getElementById("mobileFloatingWhatsapp");
+
 const lightbox = document.getElementById("lightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const lightboxClose = document.getElementById("lightboxClose");
@@ -412,11 +420,17 @@ function renderGallery(car) {
   });
 }
 
-function renderSidebar(car) {
+function buildWhatsappLink(car) {
   const siteSettings = getSiteSettings();
-  const whatsappLink = `https://wa.me/${siteSettings.whatsapp}?text=${encodeURIComponent(
+
+  return `https://wa.me/${siteSettings.whatsapp}?text=${encodeURIComponent(
     car.whatsappText || `Olá! Tenho interesse no veículo ${car.titulo}.`
   )}`;
+}
+
+function renderSidebar(car) {
+  const siteSettings = getSiteSettings();
+  const whatsappLink = buildWhatsappLink(car);
 
   sidebarWhatsapp.href = whatsappLink;
   sidebarWhatsappText.textContent = siteSettings.phoneDisplay;
@@ -428,12 +442,42 @@ function renderSidebar(car) {
   contactCardSubtitle.textContent = `Fale com a loja para receber atendimento, mais fotos e detalhes sobre ${car.titulo || "este veículo"}.`;
   contactNoteText.textContent = `Atendimento direto da Orion Veículos em ${car.cidade || siteSettings.cityDisplay}.`;
 
+  if (vehicleMainWhatsapp) {
+    vehicleMainWhatsapp.href = whatsappLink;
+  }
+
+  if (mobileFloatingWhatsapp) {
+    mobileFloatingWhatsapp.href = whatsappLink;
+  }
+
+  if (mobileFloatingPrice) {
+    mobileFloatingPrice.textContent = car.preco || "Consulte";
+  }
+
+  if (mobileFloatingTitle) {
+    mobileFloatingTitle.textContent = car.titulo || "Veículo";
+  }
+
+  if (mobileFloatingCta) {
+    mobileFloatingCta.classList.remove("hidden");
+  }
+
   if (normalizeStatus(car.status) === "vendido") {
     sidebarMainAction.removeAttribute("href");
     sidebarMainAction.removeAttribute("target");
     sidebarMainAction.removeAttribute("rel");
     sidebarMainAction.textContent = "Veículo vendido";
     sidebarMainAction.classList.add("is-sold");
+
+    if (vehicleMainWhatsapp) {
+      vehicleMainWhatsapp.removeAttribute("href");
+      vehicleMainWhatsapp.textContent = "Veículo vendido";
+    }
+
+    if (mobileFloatingWhatsapp) {
+      mobileFloatingWhatsapp.removeAttribute("href");
+      mobileFloatingWhatsapp.innerHTML = '<i class="bi bi-x-circle"></i>';
+    }
   } else {
     sidebarMainAction.href = whatsappLink;
     sidebarMainAction.target = "_blank";
@@ -603,6 +647,10 @@ if (lightboxPrev) {
 
 if (shareButton) {
   shareButton.addEventListener("click", shareVehicle);
+}
+
+if (vehicleMainShare) {
+  vehicleMainShare.addEventListener("click", shareVehicle);
 }
 
 if (lightbox) {
