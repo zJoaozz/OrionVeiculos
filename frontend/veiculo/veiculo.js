@@ -119,19 +119,41 @@ function getSiteSettings() {
   };
 }
 
-async function fetchContent() {
-  try {
-    const response = await fetch(`${API_BASE_URL}/content`);
-    const payload = await response.json();
+// Função auxiliar para fetch com timeout e tratamento de erro
+async function fetchWithTimeout(url, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    
     if (!response.ok) {
-      throw new Error(payload?.message || "Erro ao carregar conteudo do site.");
+      const payload = await response.json().catch(() => ({}));
+      throw new Error(payload?.message || `Erro HTTP ${response.status}`);
     }
 
+    return await response.json();
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Conexão perdida. A página demorou muito para carregar. Recarregue e tente novamente.");
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+async function fetchContent() {
+  try {
+    const payload = await fetchWithTimeout(`${API_BASE_URL}/content`);
     siteSettingsCache = payload?.data?.siteSettings || getDefaultSiteSettings();
     return getSiteSettings();
   } catch (error) {
     console.error("Erro ao buscar conteudo do backend:", error);
+    // Mostrar mensagem de erro
+    if (vehicleContent) {
+      vehicleContent.innerHTML = `<div style="padding: 40px; text-align: center;"><strong>⚠️ Erro ao carregar:</strong> <p>${error.message}</p></div>`;
+    }
     siteSettingsCache = getDefaultSiteSettings();
     return siteSettingsCache;
   }
@@ -163,28 +185,37 @@ function normalizeVehicleFromApi(car) {
     })
     .filter((image) => image && image.url);
 
+  // Validar coverIndex: não pode ser >= images.length
+  let validCoverIndex = Number(car?.coverIndex || 0);
+  if (validCoverIndex >= normalizedImages.length) {
+    validCoverIndex = 0;
+  }
+
   return {
     ...car,
     destaque: normalizeBoolean(car?.destaque),
     destaqueHome: normalizeBoolean(car?.destaqueHome),
     status: normalizeStatus(car?.status),
     images: normalizedImages,
-    coverIndex: Number(car?.coverIndex || 0)
+    coverIndex: validCoverIndex
   };
 }
 
 async function fetchVehicleById(vehicleId) {
   try {
-    const response = await fetch(`${API_BASE_URL}/vehicles/${vehicleId}`);
-    const payload = await response.json();
-
-    if (!response.ok) {
-      throw new Error(payload?.message || "Erro ao carregar veículo.");
-    }
-
+    const payload = await fetchWithTimeout(`${API_BASE_URL}/vehicles/${vehicleId}`);
     return payload?.data ? normalizeVehicleFromApi(payload.data) : null;
   } catch (error) {
     console.error("Erro ao buscar veículo do backend:", error);
+    // Mostrar mensagem de erro
+    if (vehicleNotFound) {
+      vehicleNotFound.classList.remove("hidden");
+      vehicleNotFound.innerHTML = `
+        <strong>⚠️ Erro ao carregar veículo</strong>
+        <p>${error.message}</p>
+        <a href="../estoque/estoque.html" class="sidebar-secondary vehicle-not-found-link">Voltar ao estoque</a>
+      `;
+    }
     return null;
   }
 }

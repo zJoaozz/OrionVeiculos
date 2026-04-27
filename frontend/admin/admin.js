@@ -645,25 +645,40 @@ async function apiRequest(endpoint, options = {}) {
     headers.set("Authorization", `Bearer ${authToken}`);
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers
-  });
+  // Criar AbortController para timeout (10 segundos)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-  const contentType = response.headers.get("content-type") || "";
-  const isJson = contentType.includes("application/json");
-  const payload = isJson ? await response.json() : null;
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      ...options,
+      headers,
+      signal: controller.signal
+    });
 
-  if (!response.ok) {
-    if (response.status === 401) {
-      clearAuthToken();
-      updateAuthUI();
+    const contentType = response.headers.get("content-type") || "";
+    const isJson = contentType.includes("application/json");
+    const payload = isJson ? await response.json() : null;
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        clearAuthToken();
+        updateAuthUI();
+      }
+
+      throw new Error(payload?.message || "Erro ao comunicar com o backend.");
     }
 
-    throw new Error(payload?.message || "Erro ao comunicar com o backend.");
+    return payload;
+  } catch (error) {
+    // Melhorar mensagens de erro
+    if (error.name === "AbortError") {
+      throw new Error("Tempo limite excedido. Verifique sua conexão e tente novamente.");
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  return payload;
 }
 
 async function uploadSingleImage(file) {
@@ -2017,6 +2032,17 @@ function validateVehicleForm() {
 }
 
 function getVehiclePayloadFromForm() {
+  const images = currentFormImages.map((image) => ({
+    url: String(image.url || "").trim(),
+    filename: String(image.filename || "").trim()
+  }));
+
+  // Validar coverIndex: não pode ser >= images.length
+  let validCoverIndex = Number(currentCoverIndex || 0);
+  if (validCoverIndex >= images.length) {
+    validCoverIndex = 0;
+  }
+
   return {
     titulo: tituloInput?.value.trim() || "",
     marca: marcaInput?.value.trim() || "",
@@ -2038,11 +2064,8 @@ function getVehiclePayloadFromForm() {
     whatsappText:
       whatsappTextInput?.value.trim() ||
       `Olá! Tenho interesse no ${tituloInput?.value.trim() || "veículo"}.`,
-    images: currentFormImages.map((image) => ({
-      url: String(image.url || "").trim(),
-      filename: String(image.filename || "").trim()
-    })),
-    coverIndex: Number(currentCoverIndex || 0)
+    images: images,
+    coverIndex: validCoverIndex
   };
 }
 

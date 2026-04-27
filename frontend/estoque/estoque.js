@@ -243,18 +243,40 @@ function renderStockSkeletons(count = 4) {
     .join("");
 }
 
-async function fetchContent() {
-  try {
-    const response = await fetch(`${API_BASE_URL}/content`);
-    const payload = await response.json();
+// Função auxiliar para fetch com timeout e tratamento de erro
+async function fetchWithTimeout(url, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    
     if (!response.ok) {
-      throw new Error(payload?.message || "Erro ao carregar conteudo do site.");
+      const payload = await response.json().catch(() => ({}));
+      throw new Error(payload?.message || `Erro HTTP ${response.status}`);
     }
 
+    return await response.json();
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Conexão perdida. A página demorou muito para carregar. Recarregue e tente novamente.");
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+async function fetchContent() {
+  try {
+    const payload = await fetchWithTimeout(`${API_BASE_URL}/content`);
     return setContentSettings(payload?.data || {});
   } catch (error) {
     console.error("Erro ao buscar conteudo do backend:", error);
+    // Mostrar mensagem de erro
+    if (stockStatusMessage) {
+      stockStatusMessage.innerHTML = `<strong>⚠️ Erro ao carregar:</strong> <p>${error.message}</p>`;
+    }
     return setContentSettings();
   }
 }
@@ -275,18 +297,17 @@ function applySiteSettings() {
 
 async function fetchVehicles() {
   try {
-    const response = await fetch(`${API_BASE_URL}/vehicles`);
-    const payload = await response.json();
-
-    if (!response.ok) {
-      throw new Error(payload?.message || "Erro ao carregar veículos.");
-    }
+    const payload = await fetchWithTimeout(`${API_BASE_URL}/vehicles`);
 
     return Array.isArray(payload?.data)
       ? payload.data.map(normalizeVehicleFromApi)
       : [];
   } catch (error) {
     console.error("Erro ao buscar veículos do backend:", error);
+    // Mostrar mensagem de erro
+    if (stockStatusMessage) {
+      stockStatusMessage.innerHTML = `<strong>⚠️ Erro ao carregar veículos:</strong> <p>${error.message}</p>`;
+    }
     return getDefaultCars();
   }
 }

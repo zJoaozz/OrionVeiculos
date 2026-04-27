@@ -513,19 +513,44 @@ function getEsteticaSettings() {
   }
 }
 
-async function fetchEsteticaSettings() {
-  try {
-    const response = await fetch(`${API_BASE_URL}/content`);
-    const payload = await response.json();
+// Função auxiliar para fetch com timeout e tratamento de erro
+async function fetchWithTimeout(url, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    
     if (!response.ok) {
-      throw new Error(payload?.message || "Erro ao carregar conteudo da estetica.");
+      const payload = await response.json().catch(() => ({}));
+      throw new Error(payload?.message || `Erro HTTP ${response.status}`);
     }
 
+    return await response.json();
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Conexão perdida. A página demorou muito para carregar. Recarregue e tente novamente.");
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+async function fetchEsteticaSettings() {
+  try {
+    const payload = await fetchWithTimeout(`${API_BASE_URL}/content`);
     esteticaSettingsCache = payload?.data?.esteticaSettings || getDefaultEsteticaSettings();
     return getEsteticaSettings();
   } catch (error) {
     console.error("Erro ao buscar conteudo da estetica:", error);
+    // Mostrar mensagem de erro
+    if (heroTitle) {
+      heroTitle.textContent = "⚠️ Erro ao carregar página";
+      if (heroSubtitle) {
+        heroSubtitle.textContent = error.message;
+      }
+    }
     esteticaSettingsCache = getDefaultEsteticaSettings();
     return esteticaSettingsCache;
   }
