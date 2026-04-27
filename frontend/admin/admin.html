@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -338,22 +338,38 @@
                         ></textarea>
                       </div>
 
-                      <div class="field full">
-                        <label for="tags">Tags de busca</label>
+                      <div class="field full auto-field">
+                        <div class="field-label-row">
+                          <label for="tags">Tags de busca</label>
+                          <button type="button" class="small-btn btn-edit auto-field-button" id="refreshAutoTags">
+                            Gerar tags
+                          </button>
+                        </div>
                         <input
                           type="text"
                           id="tags"
-                          placeholder="Ex: automatico economico sedan volkswagen voyage"
+                          placeholder="Gerado automaticamente com marca, modelo, ano, categoria e opcionais"
                         />
+                        <p class="field-helper">
+                          Campo preenchido automaticamente para melhorar a busca no estoque. Você ainda pode editar manualmente.
+                        </p>
                       </div>
 
-                      <div class="field full">
-                        <label for="whatsappText">Texto do WhatsApp</label>
+                      <div class="field full auto-field">
+                        <div class="field-label-row">
+                          <label for="whatsappText">Texto do WhatsApp</label>
+                          <button type="button" class="small-btn btn-edit auto-field-button" id="refreshWhatsappText">
+                            Gerar mensagem
+                          </button>
+                        </div>
                         <input
                           type="text"
                           id="whatsappText"
-                          placeholder="Ex: Olá! Tenho interesse no Volkswagen Voyage 1.0 Automático 2022."
+                          placeholder="Gerado automaticamente com título, ano, km, combustível e preço"
                         />
+                        <p class="field-helper">
+                          Mensagem curta criada automaticamente para abrir o WhatsApp do anúncio.
+                        </p>
                       </div>
 
                       <div class="field full image-section">

@@ -224,6 +224,11 @@ let currentEsteticaGallery3Image = "";
 let currentEsteticaGallery4Image = "";
 let adminToastTimeout = null;
 
+/* campos automáticos do cadastro de veículo */
+let hasManualTagsEdit = false;
+let hasManualWhatsappEdit = false;
+let isUpdatingAutoVehicleFields = false;
+
 /* =========================
    DADOS PADRÃO
 ========================= */
@@ -623,6 +628,112 @@ function formatVehiclePrice(price) {
   }
 
   return text;
+}
+
+
+function splitTerms(value) {
+  return String(value || "")
+    .split(/[,;|\r\n]+/)
+    .map((term) => term.trim())
+    .filter(Boolean);
+}
+
+function compactUniqueWords(value) {
+  const words = normalizeText(value)
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .split(/\s+/)
+    .map((word) => word.trim())
+    .filter(Boolean);
+
+  return [...new Set(words)].join(" ");
+}
+
+function getSelectedCategoryName() {
+  const slug = categoriaInput?.value?.trim() || "";
+  if (!slug) return "";
+
+  const selectedOption = categoriaInput?.selectedOptions?.[0];
+  const optionText = selectedOption?.textContent?.trim() || "";
+
+  if (optionText && normalizeText(optionText) !== "selecione") {
+    return optionText;
+  }
+
+  return getCategoryNameBySlug(slug);
+}
+
+function buildAutoSearchTags() {
+  const terms = [
+    tituloInput?.value,
+    marcaInput?.value,
+    modeloInput?.value,
+    anoInput?.value,
+    combustivelInput?.value,
+    cidadeInput?.value,
+    getSelectedCategoryName(),
+    categoriaInput?.value,
+    getStatusLabel(statusInput?.value),
+    tagInput?.value,
+    ...splitTerms(opcionaisInput?.value)
+  ];
+
+  return compactUniqueWords(terms.filter(Boolean).join(" "));
+}
+
+function buildAutoWhatsappText() {
+  const titulo = tituloInput?.value?.trim();
+  const marca = marcaInput?.value?.trim();
+  const modelo = modeloInput?.value?.trim();
+  const ano = anoInput?.value?.trim();
+  const tag = tagInput?.value?.trim();
+  const combustivel = combustivelInput?.value?.trim();
+  const km = kmInput?.value?.trim();
+  const preco = precoInput?.value?.trim();
+
+  const vehicleName = titulo || [marca, modelo].filter(Boolean).join(" ") || "veículo";
+  const details = [];
+
+  if (ano) details.push(ano);
+  if (tag) details.push(tag.toLowerCase());
+  if (combustivel) details.push(combustivel.toLowerCase());
+  if (km) details.push(`com ${km}`);
+  if (preco) details.push(`no valor de ${preco}`);
+
+  const detailsText = details.length ? ` ${details.join(", ")}` : "";
+
+  return `Olá! Tenho interesse no ${vehicleName}${detailsText}.`;
+}
+
+function updateAutoVehicleFields(force = false) {
+  isUpdatingAutoVehicleFields = true;
+
+  const autoTags = buildAutoSearchTags();
+  const autoWhatsappText = buildAutoWhatsappText();
+
+  if (tagsInput && (force || !hasManualTagsEdit || !tagsInput.value.trim())) {
+    tagsInput.value = autoTags;
+  }
+
+  if (
+    whatsappTextInput &&
+    (force || !hasManualWhatsappEdit || !whatsappTextInput.value.trim())
+  ) {
+    whatsappTextInput.value = autoWhatsappText;
+  }
+
+  isUpdatingAutoVehicleFields = false;
+}
+
+function markAutoFieldsAsManual() {
+  if (isUpdatingAutoVehicleFields) return;
+
+  if (document.activeElement === tagsInput) {
+    hasManualTagsEdit = Boolean(tagsInput?.value.trim());
+  }
+
+  if (document.activeElement === whatsappTextInput) {
+    hasManualWhatsappEdit = Boolean(whatsappTextInput?.value.trim());
+  }
 }
 
 function getAuthToken() {
@@ -1951,6 +2062,10 @@ function clearVehicleForm() {
   if (destaqueHomeInput) destaqueHomeInput.checked = false;
   if (formMode) formMode.textContent = "Novo cadastro";
 
+  hasManualTagsEdit = false;
+  hasManualWhatsappEdit = false;
+  updateAutoVehicleFields(true);
+
   renderVehicleImages();
   updateSelectedImagesCount();
   setSaveButtonState(false, "Salvar carro");
@@ -1980,6 +2095,10 @@ function fillVehicleForm(vehicle) {
   if (opcionaisInput) opcionaisInput.value = vehicle.opcionais || "";
   if (tagsInput) tagsInput.value = vehicle.tags || "";
   if (whatsappTextInput) whatsappTextInput.value = vehicle.whatsappText || "";
+
+  hasManualTagsEdit = Boolean(vehicle.tags);
+  hasManualWhatsappEdit = Boolean(vehicle.whatsappText);
+  updateAutoVehicleFields(false);
 
   currentFormImages = Array.isArray(vehicle.images) ? [...vehicle.images] : [];
   currentCoverIndex = Number(vehicle.coverIndex || 0);
@@ -2032,6 +2151,11 @@ function validateVehicleForm() {
 }
 
 function getVehiclePayloadFromForm() {
+  updateAutoVehicleFields(false);
+
+  const autoTags = buildAutoSearchTags();
+  const autoWhatsappText = buildAutoWhatsappText();
+
   const images = currentFormImages.map((image) => ({
     url: String(image.url || "").trim(),
     filename: String(image.filename || "").trim()
@@ -2060,10 +2184,8 @@ function getVehiclePayloadFromForm() {
     destaqueHome: Boolean(destaqueHomeInput?.checked),
     descricao: descricaoInput?.value.trim() || "",
     opcionais: opcionaisInput?.value.trim() || "",
-    tags: tagsInput?.value.trim() || "",
-    whatsappText:
-      whatsappTextInput?.value.trim() ||
-      `Olá! Tenho interesse no ${tituloInput?.value.trim() || "veículo"}.`,
+    tags: tagsInput?.value.trim() || autoTags,
+    whatsappText: whatsappTextInput?.value.trim() || autoWhatsappText,
     images: images,
     coverIndex: validCoverIndex
   };
@@ -2403,6 +2525,39 @@ function setupEventListeners() {
   adminSearchInput?.addEventListener("input", renderVehiclesList);
   adminStatusFilter?.addEventListener("change", renderVehiclesList);
   adminCategoryFilter?.addEventListener("change", renderVehiclesList);
+
+  [
+    tituloInput,
+    marcaInput,
+    modeloInput,
+    anoInput,
+    combustivelInput,
+    kmInput,
+    precoInput,
+    cidadeInput,
+    categoriaInput,
+    statusInput,
+    tagInput,
+    opcionaisInput
+  ].forEach((input) => {
+    input?.addEventListener("input", () => updateAutoVehicleFields(false));
+    input?.addEventListener("change", () => updateAutoVehicleFields(false));
+  });
+
+  tagsInput?.addEventListener("input", markAutoFieldsAsManual);
+  whatsappTextInput?.addEventListener("input", markAutoFieldsAsManual);
+
+  document.getElementById("refreshAutoTags")?.addEventListener("click", () => {
+    hasManualTagsEdit = false;
+    updateAutoVehicleFields(true);
+    tagsInput?.focus();
+  });
+
+  document.getElementById("refreshWhatsappText")?.addEventListener("click", () => {
+    hasManualWhatsappEdit = false;
+    updateAutoVehicleFields(true);
+    whatsappTextInput?.focus();
+  });
 
   categoryForm?.addEventListener("submit", handleCategorySubmit);
   categoryCancelEditButton?.addEventListener("click", clearCategoryForm);

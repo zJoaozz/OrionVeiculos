@@ -1541,3 +1541,47 @@ body.dark-mode {
     flex-direction: column;
   }
 }
+
+
+/* Campos automáticos do cadastro de veículos */
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.auto-field-button {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.field-helper {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin-top: -2px;
+}
+
+.auto-field input {
+  border-color: color-mix(in srgb, var(--line) 78%, var(--primary) 22%);
+}
+
+.auto-field input:focus {
+  border-color: rgba(255, 77, 87, 0.45);
+}
+
+@media (max-width: 560px) {
+  .field-label-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .auto-field-button {
+    width: 100%;
+  }
+}
